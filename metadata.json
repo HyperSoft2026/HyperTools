@@ -1,0 +1,6 @@
+{
+  "name": "HyperTools - أدوات المطورين من HyperSoft",
+  "description": "تطبيق أدوات تقنية ومطورين مجاني وسريع من HyperSoft - HyperTools developer utilities, converters, formatters, and network tools.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

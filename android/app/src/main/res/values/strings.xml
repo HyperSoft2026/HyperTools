@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">HyperTools</string>
+    <string name="title_activity_main">HyperTools</string>
+    <string name="package_name">com.hypersoft.hypertools</string>
+    <string name="custom_url_scheme">com.hypersoft.hypertools</string>
+</resources>
