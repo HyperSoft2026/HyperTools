@@ -21,7 +21,7 @@ export const LegalView: React.FC<LegalViewProps> = ({
   const isAr = language === 'ar';
 
   const handleOpenHyperSoftSite = () => {
-    window.open('https://hypersoft.loca.lt', '_blank', 'noopener,noreferrer');
+    window.open('https://51.75.118.17:20137', '_blank', 'noopener,noreferrer');
   };
 
   const titles = {

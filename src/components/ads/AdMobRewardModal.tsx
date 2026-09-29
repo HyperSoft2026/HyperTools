@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { ADMOB_CONFIG } from '../../config/admob';
+import { Gift, PlayCircle, ShieldCheck, X, AlertCircle } from 'lucide-react';
 import { admobService } from '../../services/admobService';
-import { Gift, X, PlayCircle, ShieldCheck, AlertCircle } from 'lucide-react';
 
 interface AdMobRewardModalProps {
   isOpen: boolean;
@@ -18,22 +17,14 @@ export const AdMobRewardModal: React.FC<AdMobRewardModalProps> = ({
   onClose,
   onRewardGranted,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
   if (!isOpen) return null;
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = useState<string>('');
   const isDark = theme === 'dark';
 
   const handleWatchRewarded = () => {
-    if (!admobService.isOnline()) {
-      setErrorMsg(
-        language === 'ar'
-          ? 'تنبيه: يلزم وجود اتصال بالإنترنت لتحميل الإعلان.'
-          : 'Internet connection required to load ads.'
-      );
-      return;
-    }
-
     setIsLoading(true);
     setErrorMsg('');
 
@@ -45,20 +36,19 @@ export const AdMobRewardModal: React.FC<AdMobRewardModalProps> = ({
       },
       () => {
         setIsLoading(false);
+      },
+      (err) => {
+        setIsLoading(false);
+        setErrorMsg(
+          language === 'ar'
+            ? 'الإعلان غير متاح حالياً، يرجى المحاولة لاحقاً.'
+            : 'Ad is currently unavailable. Please try again later.'
+        );
       }
     );
   };
 
   const handleWatchRewardedInterstitial = () => {
-    if (!admobService.isOnline()) {
-      setErrorMsg(
-        language === 'ar'
-          ? 'تنبيه: يلزم وجود اتصال بالإنترنت لتحميل الإعلان.'
-          : 'Internet connection required to load ads.'
-      );
-      return;
-    }
-
     setIsLoading(true);
     setErrorMsg('');
 
@@ -70,6 +60,14 @@ export const AdMobRewardModal: React.FC<AdMobRewardModalProps> = ({
       },
       () => {
         setIsLoading(false);
+      },
+      (err) => {
+        setIsLoading(false);
+        setErrorMsg(
+          language === 'ar'
+            ? 'الإعلان غير متاح حالياً، يرجى المحاولة لاحقاً.'
+            : 'Ad is currently unavailable. Please try again later.'
+        );
       }
     );
   };
@@ -111,17 +109,6 @@ export const AdMobRewardModal: React.FC<AdMobRewardModalProps> = ({
           </div>
         )}
 
-        <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-2 text-xs">
-          <div className="flex justify-between font-mono text-slate-300">
-            <span>{language === 'ar' ? 'مقدار المكافأة:' : 'Reward Amount:'}</span>
-            <span className="font-bold text-amber-400">{ADMOB_CONFIG.REWARD_SETTINGS.AMOUNT}</span>
-          </div>
-          <div className="flex justify-between font-mono text-slate-300">
-            <span>{language === 'ar' ? 'عنصر المكافأة:' : 'Reward Item:'}</span>
-            <span className="font-bold text-purple-400">{ADMOB_CONFIG.REWARD_SETTINGS.ITEM}</span>
-          </div>
-        </div>
-
         <div className="space-y-2 pt-1">
           <button
             onClick={handleWatchRewarded}
@@ -135,7 +122,7 @@ export const AdMobRewardModal: React.FC<AdMobRewardModalProps> = ({
                   ? 'جاري تحميل الإعلان...'
                   : 'Loading Ad...'
                 : language === 'ar'
-                ? 'مشاهدة إعلان بمكافأة (Rewarded Ad)'
+                ? 'مشاهدة إعلان بمكافأة'
                 : 'Watch Rewarded Ad'}
             </span>
           </button>
@@ -148,7 +135,7 @@ export const AdMobRewardModal: React.FC<AdMobRewardModalProps> = ({
             <ShieldCheck className="w-4 h-4 text-purple-400" />
             <span>
               {language === 'ar'
-                ? 'مشاهدة إعلان بيني بمكافأة (Rewarded Interstitial)'
+                ? 'مشاهدة إعلان بيني بمكافأة'
                 : 'Watch Rewarded Interstitial'}
             </span>
           </button>
