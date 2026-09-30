@@ -45,7 +45,7 @@ jobs:
       - name: Grant Execute Permission for Gradlew
         run: chmod +x android/gradlew
 
-      # Validate Release Signing Secrets and Decode Keystore
+      # Validate Release Signing Secrets and Decode Permanent Keystore
       - name: Validate Release Secrets & Prepare Keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
@@ -54,21 +54,22 @@ jobs:
           KEY_PASS: ${{ secrets.KEY_PASSWORD }}
         run: |
           if [ -z "$KEYSTORE_BASE64" ] || [ -z "$KEYSTORE_PASS" ] || [ -z "$ALIAS" ] || [ -z "$KEY_PASS" ]; then
-            echo "::error::Release signing secrets are missing!"
-            echo "Please ensure all 4 secrets are configured in your repository at:"
-            echo "Settings -> Secrets and variables -> Actions"
-            echo "  1. RELEASE_KEYSTORE_BASE64"
-            echo "  2. KEYSTORE_PASSWORD"
-            echo "  3. KEY_ALIAS"
-            echo "  4. KEY_PASSWORD"
-            echo ""
-            echo "If you have not generated a Keystore yet, run the 'Generate HyperTools Release Keystore' workflow first."
+            echo "::error::CRITICAL RELEASE SIGNING ERROR: Required release signing secrets are missing!"
+            echo "Please ensure the 4 permanent release secrets are configured in GitHub Settings -> Secrets and variables -> Actions:"
+            echo "  - RELEASE_KEYSTORE_BASE64"
+            echo "  - KEYSTORE_PASSWORD"
+            echo "  - KEY_ALIAS"
+            echo "  - KEY_PASSWORD"
             exit 1
           fi
           echo "$KEYSTORE_BASE64" | base64 -d > android/app/release.jks
-          echo "Release keystore prepared successfully at android/app/release.jks"
+          if [ ! -s android/app/release.jks ]; then
+            echo "::error::Decoded keystore file is empty or missing at android/app/release.jks!"
+            exit 1
+          fi
+          echo "[OK] Permanent release keystore verified and decoded successfully."
 
-      # Build Signed Production Release APK
+      # Build Signed Production Release APK with Gradle
       - name: Build Signed Release APK with Gradle
         env:
           KEYSTORE_FILE: "release.jks"
@@ -77,8 +78,13 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           cd android
-          echo "Building Signed Production Release APK (v1.0.1)..."
+          echo "Building Signed Production Release APK (v1.0.2)..."
           ./gradlew assembleRelease --stacktrace
+
+      # Strict Signature and Metadata Verification
+      - name: Verify APK Signature & Package Identity
+        run: |
+          node scripts/verify-apk-signature.cjs
 
       # Verify Output Directory
       - name: Verify Release APK Output
@@ -90,6 +96,6 @@ jobs:
       - name: Upload Release APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: HyperTools-v1.0.1-Release-APK
+          name: HyperTools-v1.0.2-Release-APK
           path: android/app/build/outputs/apk/release/*.apk
           if-no-files-found: error

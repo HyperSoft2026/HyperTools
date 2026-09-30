@@ -244,7 +244,7 @@ export const LegalView: React.FC<LegalViewProps> = ({
             >
               <span>Android Edition</span>
               <span>·</span>
-              <span>v1.0.1</span>
+              <span>v1.0.2</span>
             </div>
 
             <p style={{ color: 'var(--theme-text-secondary)' }} className="text-xs sm:text-sm leading-relaxed max-w-md mx-auto">
@@ -272,11 +272,11 @@ export const LegalView: React.FC<LegalViewProps> = ({
             </div>
             <div className="flex items-center justify-between">
               <span style={{ color: 'var(--theme-text-secondary)' }}>{isAr ? 'الإصدار:' : 'Version:'}</span>
-              <span className="font-bold text-emerald-400 font-mono">1.0.1</span>
+              <span className="font-bold text-emerald-400 font-mono">1.0.2</span>
             </div>
             <div className="flex items-center justify-between">
               <span style={{ color: 'var(--theme-text-secondary)' }}>{isAr ? 'كود الإصدار:' : 'Version Code:'}</span>
-              <span style={{ color: 'var(--theme-text)' }} className="font-bold font-mono">2</span>
+              <span style={{ color: 'var(--theme-text)' }} className="font-bold font-mono">3</span>
             </div>
             <div className="flex items-center justify-between">
               <span style={{ color: 'var(--theme-text-secondary)' }}>{isAr ? 'المنصة:' : 'Platform:'}</span>
