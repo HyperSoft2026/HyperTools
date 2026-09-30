@@ -19,7 +19,12 @@ android {
     signingConfigs {
         release {
             if (System.getenv("KEYSTORE_FILE")) {
-                storeFile file(System.getenv("KEYSTORE_FILE"))
+                def ksPath = System.getenv("KEYSTORE_FILE")
+                def ksFile = file(ksPath)
+                if (!ksFile.exists()) {
+                    ksFile = rootProject.file(ksPath)
+                }
+                storeFile ksFile
                 storePassword System.getenv("KEYSTORE_PASSWORD")
                 keyAlias System.getenv("KEY_ALIAS")
                 keyPassword System.getenv("KEY_PASSWORD")
