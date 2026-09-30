@@ -181,7 +181,7 @@ export const LegalView: React.FC<LegalViewProps> = ({
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-bold">
               <span>Android Edition</span>
               <span>·</span>
-              <span>v1.0.0</span>
+              <span>v1.0.1</span>
             </div>
 
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md mx-auto pt-2">

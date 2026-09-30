@@ -239,7 +239,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </p>
 
         <div className="pt-2 border-t border-slate-800/60 text-[11px] text-slate-500 flex items-center justify-between font-mono">
-          <span>v1.0.0 (Android Edition)</span>
+          <span>v1.0.1 (Android Edition)</span>
           <span>HyperTools By HyperSoft</span>
         </div>
       </div>

@@ -16,6 +16,7 @@ import { SettingsView } from './components/views/SettingsView';
 import { ToolDetailView } from './components/views/ToolDetailView';
 import { LegalView } from './components/views/LegalView';
 import { translations } from './data/translations';
+import { logToolOpened } from './services/firebaseAnalytics';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState<boolean>(true);
@@ -122,6 +123,9 @@ export default function App() {
 
     // Register user action for frequency-controlled interstitial ads
     admobService.registerAction();
+
+    // Privacy-safe analytics tracking for tool navigation (only tool ID and title)
+    logToolOpened(tool.id, tool.titleEn);
 
     // Update Recents
     setRecentToolIds((prev) => {
