@@ -4,8 +4,9 @@ import { CategoryFilter } from '../CategoryFilter';
 import { ToolCard } from '../ToolCard';
 import { AdMobBanner } from '../ads/AdMobBanner';
 import { AdMobNative } from '../ads/AdMobNative';
-import { Search, Sparkles, Zap } from 'lucide-react';
+import { Search, Sparkles, Zap, Trash2, X, SearchX, RotateCcw } from 'lucide-react';
 import { translations } from '../../data/translations';
+import { logSearchUsed, logCategorySelected } from '../../services/firebaseAnalytics';
 
 interface HomeViewProps {
   tools: Tool[];
@@ -16,6 +17,7 @@ interface HomeViewProps {
   recentToolIds: string[];
   onSelectTool: (tool: Tool) => void;
   onToggleFavorite: (toolId: string, e: React.MouseEvent) => void;
+  onClearRecents?: () => void;
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({
@@ -27,71 +29,122 @@ export const HomeView: React.FC<HomeViewProps> = ({
   recentToolIds,
   onSelectTool,
   onToggleFavorite,
+  onClearRecents,
 }) => {
   const t = translations[language];
   const isDark = theme === 'dark';
+  const isAr = language === 'ar';
 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<CategoryId>('all');
+  const [showClearConfirm, setShowClearConfirm] = useState<boolean>(false);
 
-  // Filter tools by search & category
+  const handleSearchChange = (val: string) => {
+    setSearchQuery(val);
+    if (val.trim().length >= 3) {
+      logSearchUsed(val.trim().length);
+    }
+  };
+
+  const handleCategoryChange = (catId: CategoryId) => {
+    setSelectedCategory(catId);
+    logCategorySelected(catId);
+  };
+
+  // Multi-criteria instant search
+  const query = searchQuery.trim().toLowerCase();
   const filteredTools = tools.filter((tool) => {
     const matchesCategory = selectedCategory === 'all' || tool.category === selectedCategory;
-    const title = language === 'ar' ? tool.titleAr : tool.titleEn;
-    const desc = language === 'ar' ? tool.descAr : tool.descEn;
-    const matchesSearch =
-      !searchQuery.trim() ||
-      title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      tool.category.toLowerCase().includes(searchQuery.toLowerCase());
+    if (!matchesCategory) return false;
+    if (!query) return true;
 
-    return matchesCategory && matchesSearch;
+    const inTitleAr = tool.titleAr.toLowerCase().includes(query);
+    const inTitleEn = tool.titleEn.toLowerCase().includes(query);
+    const inDescAr = tool.descAr.toLowerCase().includes(query);
+    const inDescEn = tool.descEn.toLowerCase().includes(query);
+    const inCat = tool.category.toLowerCase().includes(query);
+    const inKeywords = tool.keywords ? tool.keywords.some((k) => k.toLowerCase().includes(query)) : false;
+
+    return inTitleAr || inTitleEn || inDescAr || inDescEn || inCat || inKeywords;
   });
 
-  const recentTools = tools.filter((tool) => recentToolIds.includes(tool.id));
+  // Recent tools ordered by most recent first
+  const recentTools = recentToolIds
+    .map((id) => tools.find((t) => t.id === id))
+    .filter((tool): tool is Tool => Boolean(tool));
 
   return (
     <div className="space-y-6 pb-20">
       {/* Hero Header & Search Section */}
-      <div className="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-purple-900/50 via-slate-900 to-indigo-950 border border-purple-500/20 shadow-xl overflow-hidden">
-        <div className="absolute -top-12 -right-12 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none" />
-
+      <div
+        style={{
+          background: 'var(--theme-hero-gradient)',
+          borderColor: 'var(--theme-hero-border)',
+          boxShadow: 'var(--theme-shadow)',
+        }}
+        className="relative rounded-3xl p-6 sm:p-8 border shadow-xl overflow-hidden"
+      >
         <div className="relative z-10 space-y-4 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-bold">
+          <div
+            style={{
+              backgroundColor: 'var(--theme-primary-subtle)',
+              borderColor: 'var(--theme-border)',
+              color: 'var(--theme-primary)',
+            }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-bold"
+          >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>{language === 'ar' ? 'تطبيق أدوات تقنية مجاني 100%' : '100% Free Developer Tools'}</span>
+            <span>{language === 'ar' ? 'تطبيق أدوات تقنية للمطورين' : 'Developer Utilities Suite'}</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
             {language === 'ar' ? (
               <>
-                هايبر تولز - <span className="bg-gradient-to-r from-purple-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent">أدوات المطورين</span>
+                هايبر تولز - <span className="brand-gradient-text font-black">أدوات المطورين</span>
               </>
             ) : (
               <>
-                HyperTools - <span className="bg-gradient-to-r from-purple-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent">Developer Utilities</span>
+                HyperTools - <span className="brand-gradient-text font-black">Developer Utilities</span>
               </>
             )}
           </h1>
 
           <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
             {language === 'ar'
-              ? 'مجموعة أدوات برمجية فائقة السرعة من شركة HyperSoft تعمل مباشرة على جهازك دون الحاجة لسيرفر للحفاظ على خصوصيتك وسرعة عملك.'
-              : 'Lightning-fast developer and security tools by HyperSoft running 100% client-side for maximum speed and security.'}
+              ? 'مجموعة أدوات برمجية من شركة HyperSoft مصممة لمساعدتك في إنجاز مهامك التقنية واليومية بسرعة وسهولة مع الحرص على خصوصية بياناتك.'
+              : 'Developer utilities by HyperSoft designed to help you accomplish technical and coding tasks quickly and easily with respect for your privacy.'}
           </p>
 
-          {/* Search Input Box */}
+          {/* Search Input Box with Clear Button */}
           <div className="relative pt-2">
             <div className="relative flex items-center">
-              <Search className="w-5 h-5 absolute left-4 text-purple-400 pointer-events-none" />
+              <Search
+                style={{ color: 'var(--theme-primary)' }}
+                className={`w-5 h-5 absolute ${isAr ? 'right-4' : 'left-4'} pointer-events-none`}
+              />
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder={t.searchPlaceholder}
-                className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-slate-950/80 border border-purple-500/30 text-white text-sm font-semibold placeholder-slate-400 outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-500/20 transition-all shadow-inner"
+                style={{
+                  backgroundColor: 'var(--theme-input)',
+                  borderColor: 'var(--theme-border)',
+                  color: 'var(--theme-input-text)',
+                }}
+                className={`w-full py-3.5 rounded-2xl border text-sm font-semibold outline-none focus:ring-2 transition-all shadow-inner ${
+                  isAr ? 'pr-12 pl-11' : 'pl-12 pr-11'
+                }`}
               />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className={`absolute ${isAr ? 'left-3' : 'right-3'} p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-black/20 transition-colors`}
+                  title={t.clearSearch}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -107,27 +160,65 @@ export const HomeView: React.FC<HomeViewProps> = ({
           selectedCategory={selectedCategory}
           language={language}
           theme={theme}
-          onSelectCategory={(id) => setSelectedCategory(id)}
+          onSelectCategory={handleCategoryChange}
         />
       </div>
 
-      {/* Recent Tools Bar (If any exist) */}
+      {/* Recent Tools Bar (with Clear History Action) */}
       {recentTools.length > 0 && !searchQuery && selectedCategory === 'all' && (
         <div className="space-y-3">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400 px-1">
-            <Zap className="w-3.5 h-3.5 text-amber-400" />
-            <span>{t.recentTools}</span>
+          <div className="flex items-center justify-between text-xs font-bold text-slate-400 px-1">
+            <div className="flex items-center gap-1.5">
+              <Zap className="w-3.5 h-3.5 text-amber-400" />
+              <span>{t.recentTools}</span>
+            </div>
+
+            {onClearRecents && (
+              <div>
+                {showClearConfirm ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-amber-400">{isAr ? 'مسح السجل؟' : 'Clear?'}</span>
+                    <button
+                      onClick={() => {
+                        onClearRecents();
+                        setShowClearConfirm(false);
+                      }}
+                      className="text-[11px] font-bold text-red-400 hover:text-red-300 underline"
+                    >
+                      {isAr ? 'نعم' : 'Yes'}
+                    </button>
+                    <button
+                      onClick={() => setShowClearConfirm(false)}
+                      className="text-[11px] text-slate-400 hover:text-slate-300"
+                    >
+                      {isAr ? 'إلغاء' : 'Cancel'}
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowClearConfirm(true)}
+                    className="text-[11px] font-medium text-slate-400 hover:text-red-400 flex items-center gap-1 transition-colors"
+                    title={t.clearRecents}
+                  >
+                    <Trash2 className="w-3 h-3" />
+                    <span>{t.clearRecents}</span>
+                  </button>
+                )}
+              </div>
+            )}
           </div>
+
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
             {recentTools.map((tool) => (
               <button
                 key={tool.id}
                 onClick={() => onSelectTool(tool)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold border shrink-0 flex items-center gap-2 transition-transform active:scale-95 ${
-                  isDark
-                    ? 'bg-slate-900 border-slate-800 text-purple-300 hover:bg-slate-800'
-                    : 'bg-white border-slate-200 text-purple-700 shadow-sm'
-                }`}
+                style={{
+                  backgroundColor: 'var(--theme-surface)',
+                  borderColor: 'var(--theme-border)',
+                  color: 'var(--theme-primary)',
+                }}
+                className="px-3.5 py-2 rounded-xl text-xs font-bold border shrink-0 flex items-center gap-2 transition-transform active:scale-95 hover:opacity-90 shadow-xs"
               >
                 <span>{language === 'ar' ? tool.titleAr : tool.titleEn}</span>
               </button>
@@ -138,22 +229,65 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       {/* Main Tools Grid */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between text-xs font-bold text-slate-400 px-1">
-          <span>{t.allTools} ({filteredTools.length})</span>
-        </div>
-
-        {filteredTools.length === 0 ? (
-          <div className="p-12 text-center text-slate-500 font-semibold rounded-2xl bg-slate-900/40 border border-slate-800 space-y-2">
-            <p>{t.noToolsFound}</p>
+        <div className="flex items-center justify-between text-xs font-bold px-1">
+          <span style={{ color: 'var(--theme-text-secondary)' }}>{t.allTools} ({filteredTools.length})</span>
+          {searchQuery && (
             <button
               onClick={() => {
                 setSearchQuery('');
                 setSelectedCategory('all');
               }}
-              className="text-xs font-bold text-purple-400 hover:underline"
+              style={{ color: 'var(--theme-primary)' }}
+              className="text-xs font-semibold flex items-center gap-1 hover:opacity-80"
             >
-              {t.clearSearch}
+              <RotateCcw className="w-3 h-3" />
+              <span>{t.reset}</span>
             </button>
+          )}
+        </div>
+
+        {filteredTools.length === 0 ? (
+          <div
+            style={{
+              backgroundColor: 'var(--theme-surface)',
+              borderColor: 'var(--theme-border)',
+            }}
+            className="p-10 sm:p-14 text-center rounded-3xl border space-y-4 shadow-xs"
+          >
+            <div
+              style={{
+                backgroundColor: 'var(--theme-primary-subtle)',
+                color: 'var(--theme-primary)',
+              }}
+              className="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center border border-current"
+            >
+              <SearchX className="w-7 h-7" />
+            </div>
+            <div className="space-y-1">
+              <h3 style={{ color: 'var(--theme-text)' }} className="text-base font-bold">
+                {t.noToolsFound}
+              </h3>
+              <p style={{ color: 'var(--theme-text-secondary)' }} className="text-xs max-w-sm mx-auto">
+                {t.searchNoResultsDesc}
+              </p>
+            </div>
+            <div>
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedCategory('all');
+                }}
+                style={{
+                  background: 'linear-gradient(to right, var(--theme-primary), var(--theme-secondary))',
+                  color: 'var(--theme-primary-text)',
+                  boxShadow: 'var(--theme-shadow)',
+                }}
+                className="px-4 py-2 rounded-xl font-bold text-xs transition-opacity hover:opacity-90 shadow-sm inline-flex items-center gap-1.5"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>{t.clearSearch}</span>
+              </button>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -164,6 +298,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   language={language}
                   theme={theme}
                   isFavorite={favorites.includes(tool.id)}
+                  isRecent={recentToolIds.includes(tool.id)}
                   onSelect={onSelectTool}
                   onToggleFavorite={onToggleFavorite}
                 />

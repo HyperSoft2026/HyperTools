@@ -35,9 +35,13 @@ export const HyperLogo: React.FC<HyperLogoProps> = ({
     <div className="flex items-center gap-2.5 select-none">
       {/* Icon Badge */}
       <div
-        className={`relative ${iconDimensions} rounded-xl bg-gradient-to-br from-purple-600 via-indigo-600 to-violet-900 p-0.5 shadow-lg shadow-purple-500/20 ring-1 ring-purple-400/30 flex items-center justify-center shrink-0 overflow-hidden group`}
+        style={{
+          background: 'linear-gradient(135deg, var(--theme-primary, #9333ea), var(--theme-secondary, #6366f1))',
+          boxShadow: 'var(--theme-shadow, 0 8px 20px -4px rgba(147, 51, 234, 0.2))',
+        }}
+        className={`relative ${iconDimensions} rounded-xl p-0.5 border border-white/20 flex items-center justify-center shrink-0 overflow-hidden group`}
       >
-        <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 via-transparent to-purple-500/30 opacity-75 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute inset-0 bg-white/10 opacity-50 group-hover:opacity-100 transition-opacity" />
         
         {/* SVG Emblem representing H with wrench and gear */}
         <svg
@@ -78,12 +82,12 @@ export const HyperLogo: React.FC<HyperLogoProps> = ({
           <defs>
             <linearGradient id="logo-grad-1" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#ffffff" />
-              <stop offset="100%" stopColor="#c084fc" />
+              <stop offset="100%" stopColor="var(--theme-primary, #c084fc)" />
             </linearGradient>
             <linearGradient id="logo-grad-2" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#a855f7" />
-              <stop offset="50%" stopColor="#38bdf8" />
-              <stop offset="100%" stopColor="#818cf8" />
+              <stop offset="0%" stopColor="var(--theme-primary, #a855f7)" />
+              <stop offset="50%" stopColor="var(--theme-accent, #38bdf8)" />
+              <stop offset="100%" stopColor="var(--theme-secondary, #818cf8)" />
             </linearGradient>
           </defs>
         </svg>
@@ -96,7 +100,7 @@ export const HyperLogo: React.FC<HyperLogoProps> = ({
             <span className={theme === 'dark' ? 'text-white' : 'text-slate-900'}>
               Hyper
             </span>
-            <span className="bg-gradient-to-r from-purple-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="brand-gradient-text font-black">
               Tools
             </span>
           </div>

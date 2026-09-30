@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Language, Theme, TabView, Tool, LegalPage } from './types';
+import { Language, Theme, TabView, Tool, LegalPage, AppTheme } from './types';
 import { toolsList, categories } from './data/toolsList';
 import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
@@ -16,7 +16,13 @@ import { SettingsView } from './components/views/SettingsView';
 import { ToolDetailView } from './components/views/ToolDetailView';
 import { LegalView } from './components/views/LegalView';
 import { translations } from './data/translations';
-import { logToolOpened } from './services/firebaseAnalytics';
+import {
+  logAppOpen,
+  logToolOpened,
+  logFavoriteAdded,
+  logFavoriteRemoved,
+  logCopyResult,
+} from './services/firebaseAnalytics';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState<boolean>(true);
@@ -27,6 +33,10 @@ export default function App() {
 
   const [theme, setTheme] = useState<Theme>(() => {
     return (localStorage.getItem('ht_theme') as Theme) || 'dark';
+  });
+
+  const [appTheme, setAppTheme] = useState<AppTheme>(() => {
+    return (localStorage.getItem('ht_app_theme') as AppTheme) || 'professional';
   });
 
   const [activeTab, setActiveTab] = useState<TabView>('home');
@@ -72,12 +82,22 @@ export default function App() {
     localStorage.setItem('ht_theme', theme);
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
-      document.body.className = 'bg-slate-950 text-slate-100 antialiased min-h-screen';
     } else {
       document.documentElement.classList.remove('dark');
-      document.body.className = 'bg-slate-100 text-slate-900 antialiased min-h-screen';
     }
+    document.body.className = 'antialiased min-h-screen';
   }, [theme]);
+
+  // Sync AppTheme (Central Theme System)
+  useEffect(() => {
+    localStorage.setItem('ht_app_theme', appTheme);
+    document.documentElement.setAttribute('data-app-theme', appTheme);
+  }, [appTheme]);
+
+  // Log App Open via privacy-safe analytics
+  useEffect(() => {
+    logAppOpen();
+  }, []);
 
   // App Open Ad on visibility change (returning to app)
   useEffect(() => {
@@ -113,8 +133,20 @@ export default function App() {
   const handleCopy = (text: string) => {
     if (!text) return;
     navigator.clipboard.writeText(text).then(() => {
-      triggerToast(language === 'ar' ? 'تم النسخ إلى الحافظة!' : 'Copied to clipboard!');
+      logCopyResult('tool_result');
+      triggerToast(
+        language === 'ar' ? 'تم النسخ إلى الحافظة بنجاح!' : 'Copied to clipboard successfully!',
+        'success'
+      );
     });
+  };
+
+  const handleClearRecents = () => {
+    setRecentToolIds([]);
+    triggerToast(
+      language === 'ar' ? 'تم مسح سجل الأدوات المستخدمة مؤخراً بنجاح.' : 'Recent tools history cleared successfully.',
+      'info'
+    );
   };
 
   const handleSelectTool = (tool: Tool) => {
@@ -155,23 +187,34 @@ export default function App() {
     e.stopPropagation();
     setFavorites((prev) => {
       const isFav = prev.includes(toolId);
-      const next = isFav ? prev.filter((id) => id !== toolId) : [...prev, toolId];
-      triggerToast(
-        isFav
-          ? language === 'ar'
-            ? 'تمت الإزالة من المفضلة'
-            : 'Removed from favorites'
-          : language === 'ar'
-          ? 'تمت الإضافة للمفضلة'
-          : 'Added to favorites',
-        isFav ? 'info' : 'success'
-      );
-      return next;
+      if (isFav) {
+        logFavoriteRemoved(toolId);
+        triggerToast(
+          language === 'ar' ? 'تمت الإزالة من المفضلة' : 'Removed from favorites',
+          'info'
+        );
+        return prev.filter((id) => id !== toolId);
+      } else {
+        logFavoriteAdded(toolId);
+        triggerToast(
+          language === 'ar' ? 'تمت الإضافة إلى المفضلة' : 'Added to favorites',
+          'success'
+        );
+        return [...prev, toolId];
+      }
     });
   };
 
   return (
-    <div className={`min-h-screen flex flex-col font-sans transition-colors duration-200 ${theme === 'dark' ? 'bg-slate-950 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
+    <div
+      style={{
+        backgroundColor: 'var(--theme-bg)',
+        color: 'var(--theme-text)',
+        backgroundImage: 'var(--theme-pattern)',
+        backgroundSize: '28px 28px',
+      }}
+      className="min-h-screen flex flex-col font-sans transition-colors duration-200"
+    >
       {/* Splash Screen */}
       {showSplash && (
         <SplashScreen
@@ -222,6 +265,7 @@ export default function App() {
             recentToolIds={recentToolIds}
             onSelectTool={handleSelectTool}
             onToggleFavorite={handleToggleFavorite}
+            onClearRecents={handleClearRecents}
           />
         )}
 
@@ -232,6 +276,7 @@ export default function App() {
             language={language}
             theme={theme}
             favorites={favorites}
+            recentToolIds={recentToolIds}
             onSelectTool={handleSelectTool}
             onToggleFavorite={handleToggleFavorite}
           />
@@ -243,6 +288,7 @@ export default function App() {
             language={language}
             theme={theme}
             favorites={favorites}
+            recentToolIds={recentToolIds}
             onSelectTool={handleSelectTool}
             onToggleFavorite={handleToggleFavorite}
           />
@@ -252,8 +298,16 @@ export default function App() {
           <SettingsView
             language={language}
             theme={theme}
+            appTheme={appTheme}
             onLanguageToggle={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
             onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            onSelectAppTheme={(newTheme) => {
+              setAppTheme(newTheme);
+              triggerToast(
+                language === 'ar' ? 'تم تطبيق المظهر بنجاح' : 'Theme applied successfully',
+                'success'
+              );
+            }}
             onSelectLegal={handleSelectLegal}
             onOpenRewardModal={() => setIsRewardModalOpen(true)}
           />
@@ -265,6 +319,7 @@ export default function App() {
             language={language}
             theme={theme}
             onBack={() => setActiveTab('settings')}
+            onTriggerToast={triggerToast}
           />
         )}
 

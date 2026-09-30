@@ -9,6 +9,7 @@ interface FavoritesViewProps {
   language: Language;
   theme: Theme;
   favorites: string[];
+  recentToolIds?: string[];
   onSelectTool: (tool: Tool) => void;
   onToggleFavorite: (toolId: string, e: React.MouseEvent) => void;
 }
@@ -18,6 +19,7 @@ export const FavoritesView: React.FC<FavoritesViewProps> = ({
   language,
   theme,
   favorites,
+  recentToolIds = [],
   onSelectTool,
   onToggleFavorite,
 }) => {
@@ -30,11 +32,11 @@ export const FavoritesView: React.FC<FavoritesViewProps> = ({
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <Heart className="w-6 h-6 text-pink-500 fill-pink-500" />
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
+          <h1 style={{ color: 'var(--theme-text)' }} className="text-xl sm:text-2xl font-bold tracking-tight">
             {t.favorites}
           </h1>
         </div>
-        <p className="text-xs sm:text-sm text-slate-400">
+        <p style={{ color: 'var(--theme-text-secondary)' }} className="text-xs sm:text-sm">
           {language === 'ar'
             ? 'الأدوات التي قمت بنجمها للحصول على وصول سريع ومباشر.'
             : 'Your starred tools for fast, one-tap access.'}
@@ -42,13 +44,23 @@ export const FavoritesView: React.FC<FavoritesViewProps> = ({
       </div>
 
       {favoriteTools.length === 0 ? (
-        <div className="p-12 text-center rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
-          <Heart className="w-12 h-12 text-slate-600 mx-auto" />
-          <p className="text-slate-400 text-sm font-semibold">{t.noFavoritesYet}</p>
-          <p className="text-slate-500 text-xs">
+        <div
+          style={{
+            backgroundColor: 'var(--theme-surface)',
+            borderColor: 'var(--theme-border)',
+          }}
+          className="p-12 text-center rounded-3xl border space-y-3 shadow-xs"
+        >
+          <div className="w-14 h-14 rounded-2xl bg-pink-500/10 text-pink-500 mx-auto flex items-center justify-center">
+            <Heart className="w-7 h-7" />
+          </div>
+          <p style={{ color: 'var(--theme-text)' }} className="text-sm font-bold">
+            {t.noFavoritesYet}
+          </p>
+          <p style={{ color: 'var(--theme-text-secondary)' }} className="text-xs max-w-sm mx-auto">
             {language === 'ar'
-              ? 'اضغط على رمز النجمة على أي أداة لإضافتها إلى المفضلة.'
-              : 'Click the star icon on any tool card to add it here.'}
+              ? 'اضغط على رمز النجمة على أي أداة لإضافتها إلى المفضلة لتصل إليها بنقرة واحدة.'
+              : 'Click the star icon on any tool card to add it here for instant one-tap access.'}
           </p>
         </div>
       ) : (
@@ -60,6 +72,7 @@ export const FavoritesView: React.FC<FavoritesViewProps> = ({
               language={language}
               theme={theme}
               isFavorite={true}
+              isRecent={recentToolIds.includes(tool.id)}
               onSelect={onSelectTool}
               onToggleFavorite={onToggleFavorite}
             />

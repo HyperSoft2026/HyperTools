@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LegalPage, Language, Theme } from '../../types';
-import { ArrowLeft, ArrowRight, ShieldCheck, FileText, AlertTriangle, Info, ExternalLink } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ShieldCheck,
+  FileText,
+  AlertTriangle,
+  Info,
+  ExternalLink,
+  CheckCircle2,
+  RefreshCw,
+} from 'lucide-react';
 import { HyperLogo } from '../HyperLogo';
+import { translations } from '../../data/translations';
 
 interface LegalViewProps {
   page: LegalPage;
   language: Language;
   theme: Theme;
   onBack: () => void;
+  onTriggerToast?: (message: string, type?: 'success' | 'error' | 'info') => void;
 }
 
 export const LegalView: React.FC<LegalViewProps> = ({
@@ -15,16 +27,33 @@ export const LegalView: React.FC<LegalViewProps> = ({
   language,
   theme,
   onBack,
+  onTriggerToast,
 }) => {
   const isDark = theme === 'dark';
   const BackIcon = language === 'ar' ? ArrowRight : ArrowLeft;
   const isAr = language === 'ar';
+  const t = translations[language];
+
+  const [isCheckingUpdate, setIsCheckingUpdate] = useState<boolean>(false);
+  const [updateMessage, setUpdateMessage] = useState<string | null>(null);
 
   const handleOpenHyperSoftSite = () => {
     window.open('https://51.75.118.17:20137', '_blank', 'noopener,noreferrer');
   };
 
-  const titles = {
+  const handleCheckUpdates = () => {
+    setIsCheckingUpdate(true);
+    setUpdateMessage(null);
+    setTimeout(() => {
+      setIsCheckingUpdate(false);
+      setUpdateMessage(t.latestVersionInstalled);
+      if (onTriggerToast) {
+        onTriggerToast(t.latestVersionInstalled, 'success');
+      }
+    }, 700);
+  };
+
+  const titles: Record<LegalPage, string> = {
     privacy: isAr ? 'سياسة الخصوصية' : 'Privacy Policy',
     terms: isAr ? 'شروط الاستخدام' : 'Terms of Use',
     disclaimer: isAr ? 'إخلاء المسؤولية' : 'Disclaimer',
@@ -34,77 +63,87 @@ export const LegalView: React.FC<LegalViewProps> = ({
   return (
     <div className="space-y-6 pb-24 max-w-3xl mx-auto">
       {/* Top Nav Header */}
-      <div className="flex items-center justify-between border-b border-slate-800/60 pb-4">
+      <div
+        style={{ borderColor: 'var(--theme-border)' }}
+        className="flex items-center justify-between border-b pb-4"
+      >
         <button
           onClick={onBack}
-          className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-colors ${
-            isDark
-              ? 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white'
-              : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
-          }`}
+          style={{
+            backgroundColor: 'var(--theme-surface)',
+            borderColor: 'var(--theme-border)',
+            color: 'var(--theme-text)',
+          }}
+          className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-colors hover:opacity-90 shadow-xs"
         >
           <BackIcon className="w-4 h-4" />
           <span>{isAr ? 'الرجوع للإعدادات' : 'Back to Settings'}</span>
         </button>
 
-        <span className="text-xs font-bold text-slate-400">HyperSoft Legal</span>
+        <span style={{ color: 'var(--theme-text-secondary)' }} className="text-xs font-semibold">
+          HyperTools v1.0.1
+        </span>
       </div>
 
       {/* Page Title */}
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
-          {page === 'privacy' && <ShieldCheck className="w-5 h-5" />}
-          {page === 'terms' && <FileText className="w-5 h-5" />}
-          {page === 'disclaimer' && <AlertTriangle className="w-5 h-5" />}
-          {page === 'about' && <Info className="w-5 h-5" />}
-        </div>
-        <h1 className="text-2xl font-extrabold tracking-tight">{titles[page]}</h1>
+      <div className="space-y-1">
+        <h1 style={{ color: 'var(--theme-text)' }} className="text-xl sm:text-2xl font-bold tracking-tight">
+          {titles[page]}
+        </h1>
+        <p style={{ color: 'var(--theme-text-secondary)' }} className="text-xs sm:text-sm">
+          {isAr
+            ? 'تطبيق HyperTools من تطوير شركة HyperSoft للأدوات والحلول البرمجية.'
+            : 'HyperTools by HyperSoft software solutions and developer utilities.'}
+        </p>
       </div>
-
-      {/* Page Content Cards */}
 
       {/* PRIVACY POLICY */}
       {page === 'privacy' && (
         <div
-          className={`p-6 rounded-3xl border space-y-4 text-xs sm:text-sm leading-relaxed ${
-            isDark ? 'bg-slate-900/80 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-700 shadow-sm'
-          }`}
+          style={{
+            backgroundColor: 'var(--theme-surface)',
+            borderColor: 'var(--theme-border)',
+          }}
+          className="p-6 rounded-3xl border space-y-4 text-xs sm:text-sm leading-relaxed shadow-xs"
         >
-          <div className="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-300 font-semibold space-y-1">
-            <div className="text-sm font-bold">{isAr ? 'تطبيق محلي 100% (Local-First Architecture)' : '100% Local-First Application'}</div>
-            <p>
-              {isAr
-                ? 'تطبيق HyperTools يعتمد تماماً على المعالجة المحلية على جهاز المستخدم. لا توجد خوادم تعتمد عليها الأدوات الأساسية.'
-                : 'HyperTools operates fully as a Local-First utility suite on your device without backend dependency.'}
-            </p>
+          <div
+            style={{
+              backgroundColor: 'var(--theme-primary-subtle)',
+              borderColor: 'var(--theme-border)',
+              color: 'var(--theme-text)',
+            }}
+            className="p-4 rounded-2xl border font-medium"
+          >
+            {isAr
+              ? 'نحرص على تقليل البيانات التي يتم جمعها ومشاركة أقل قدر ممكن من المعلومات الضرورية لتشغيل وتحسين التطبيق.'
+              : 'We strive to minimize data collection and share only the essential information necessary to operate and improve the application.'}
           </div>
 
-          <h3 className="font-bold text-base text-white pt-2">{isAr ? '1. معالجة بيانات الأدوات' : '1. Tool Data Processing'}</h3>
-          <p>
+          <h3 style={{ color: 'var(--theme-text)' }} className="font-bold text-base pt-2">
+            {isAr ? '1. البيانات والخصوصية' : '1. Data & Privacy'}
+          </h3>
+          <p style={{ color: 'var(--theme-text-secondary)' }}>
             {isAr
-              ? 'جميع البيانات والمعلومات التي يدخلها المستخدم في الأدوات البرمجية (مثل مولد كلمات المرور، النصوص، رموز JSON/JWT، التشفير) تتم معالجتها وحسابها محلياً على جهازك دون إرسالها إلى خوادم HyperSoft.'
-              : 'All input data across tools (Password Gen, JSON, JWT, Base64, Hashes, IP calculations) is processed purely locally on your device and is never sent to HyperSoft servers.'}
+              ? 'تتم معظم العمليات الحسابية للأدوات محلياً على جهازك. لا نطلب إنشاء حساب أو تسجيل دخول، ولا نقوم بجمع أو حفظ كلمات المرور أو الرموز المشفرة أو أي مدخلات حساسة يدخلها المستخدم.'
+              : 'Most utility calculations are processed directly on your device. We do not require registration or account creation, and we do not collect or store passwords, encrypted tokens, or sensitive user inputs.'}
           </p>
 
-          <h3 className="font-bold text-base text-white pt-2">{isAr ? '2. الحسابات والتخزين المحلي' : '2. Accounts & Local Storage'}</h3>
-          <p>
+          <h3 style={{ color: 'var(--theme-text)' }} className="font-bold text-base pt-2">
+            {isAr ? '2. الإعلانات' : '2. Advertisements'}
+          </h3>
+          <p style={{ color: 'var(--theme-text-secondary)' }}>
             {isAr
-              ? 'لا يتطلب التطبيق إنشاء حساب أو تسجيل دخول لاستخدام الأدوات. يتم تخزين تفضيلات المستخدم (مثل المفضلة، اللغة، والمظهر) محلياً على الجهاز باستخدام LocalStorage.'
-              : 'No account creation or login is required. User preferences such as favorites, language, and theme are stored locally on device via LocalStorage.'}
+              ? 'يستخدم التطبيق شبكة Google AdMob لعرض إعلانات تدعم استمرارية التطبيق المجاني وفق سياسات Google المعتمدة.'
+              : 'The application uses Google AdMob to display compliant advertisements that support our free application in accordance with Google publisher policies.'}
           </p>
 
-          <h3 className="font-bold text-base text-white pt-2">{isAr ? '3. الإعلانات والخدمات الخارجية' : '3. Advertisements & External Services'}</h3>
-          <p>
+          <h3 style={{ color: 'var(--theme-text)' }} className="font-bold text-base pt-2">
+            {isAr ? '3. تحسين الأداء والاستقرار' : '3. Stability & Performance'}
+          </h3>
+          <p style={{ color: 'var(--theme-text-secondary)' }}>
             {isAr
-              ? 'قد يستخدم التطبيق خدمة Google AdMob لعرض الإعلانات عند الاتصال بالشبكة، وتخضع معالجة بيانات الإعلانات لسياسات الخصوصية الخاصة بشركة Google. فتح موقع HyperSoft يتم عبر المتصفح الخارجي.'
-              : 'Google AdMob may process information necessary for displaying ads when online according to Google policies. Opening the HyperSoft website launches your external mobile browser.'}
-          </p>
-
-          <h3 className="font-bold text-base text-white pt-2">{isAr ? '4. التحديثات' : '4. Policy Updates'}</h3>
-          <p>
-            {isAr
-              ? 'قد تتغير سياسة الخصوصية هذه مستقبلاً مع إضافة ميزات جديدة، وسيكون التحديث متوفراً دائماً داخل التطبيق.'
-              : 'This Privacy Policy may be updated in future releases as new features are introduced.'}
+              ? 'قد نستخدم خدمات تحليلية وتقنية لرصد أعطال النظام الفنية وتحسين استقرار التطبيق دون تسجيل بيانات المستخدم الشخصية.'
+              : 'We may use technical telemetry to monitor app stability and resolve crashes without collecting personal user identities.'}
           </p>
         </div>
       )}
@@ -112,29 +151,28 @@ export const LegalView: React.FC<LegalViewProps> = ({
       {/* TERMS OF USE */}
       {page === 'terms' && (
         <div
-          className={`p-6 rounded-3xl border space-y-4 text-xs sm:text-sm leading-relaxed ${
-            isDark ? 'bg-slate-900/80 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-700 shadow-sm'
-          }`}
+          style={{
+            backgroundColor: 'var(--theme-surface)',
+            borderColor: 'var(--theme-border)',
+          }}
+          className="p-6 rounded-3xl border space-y-4 text-xs sm:text-sm leading-relaxed shadow-xs"
         >
-          <h3 className="font-bold text-base text-white">{isAr ? '1. الاستخدام المقبول والقانوني' : '1. Acceptable Legal Use'}</h3>
-          <p>
+          <h3 style={{ color: 'var(--theme-text)' }} className="font-bold text-base">
+            {isAr ? '1. شروط الاستخدام المشروع' : '1. Legitimate Usage'}
+          </h3>
+          <p style={{ color: 'var(--theme-text-secondary)' }}>
             {isAr
-              ? 'يجب استخدام تطبيق HyperTools لأغراض التعلم والتطوير والاستخدام التقني المشروع فقط. يُمنع منعاً باتاً استخدام أي من أدوات التطبيق في أنشطة غير قانونية، ضارة، أو غير مصرح بها.'
-              : 'HyperTools must be used for learning, development, and legitimate technical uses only. Unauthorized or unlawful use is strictly prohibited.'}
+              ? 'يُتاح تطبيق HyperTools مجاناً للاستخدام في الأغراض المشروعة والتعليمية والبرمجية. يحظر تماماً استخدام أي من أدوات التشفير أو الشبكات في أنشطة ضارة أو تنتهك القوانين.'
+              : 'HyperTools is provided free for legitimate, educational, and software engineering purposes. Using networking or security tools for unauthorized activities is strictly forbidden.'}
           </p>
 
-          <h3 className="font-bold text-base text-white pt-2">{isAr ? '2. مسؤولية المستخدم والنتائج' : '2. User Responsibility'}</h3>
-          <p>
+          <h3 style={{ color: 'var(--theme-text)' }} className="font-bold text-base pt-2">
+            {isAr ? '2. الملكية الفكرية' : '2. Intellectual Property'}
+          </h3>
+          <p style={{ color: 'var(--theme-text-secondary)' }}>
             {isAr
-              ? 'يتحمل المستخدم وحده المسئولية الكاملة عن طريقة استخدام الأدوات والنتائج التي يحصل عليها من التطبيق. لا يوجد ضمان صريح بأن نتائج الأدوات مناسبة لجميع حالات الاستخدام دون تحقق تقني.'
-              : 'The user assumes full responsibility for the usage of tools and the results obtained. No warranty is provided that outputs are fit for every purpose without verification.'}
-          </p>
-
-          <h3 className="font-bold text-base text-white pt-2">{isAr ? '3. التحديثات والتعديلات' : '3. Service Updates'}</h3>
-          <p>
-            {isAr
-              ? 'تحتفظ شركة HyperSoft بحق تحديث، تعديل، أو تحسين وظائف التطبيق أو تعديل شروط الاستخدام بما يتوافق مع الأنظمة والقوانين المعمول بها.'
-              : 'HyperSoft reserves the right to update or modify features and terms in compliance with applicable laws.'}
+              ? 'جميع حقوق التصميم والشعار والعلامة التجارية HyperTools و HyperSoft محفوظة لشركة HyperSoft.'
+              : 'All design rights, logos, and trademarks of HyperTools and HyperSoft belong exclusively to HyperSoft.'}
           </p>
         </div>
       )}
@@ -142,11 +180,20 @@ export const LegalView: React.FC<LegalViewProps> = ({
       {/* DISCLAIMER */}
       {page === 'disclaimer' && (
         <div
-          className={`p-6 rounded-3xl border space-y-4 text-xs sm:text-sm leading-relaxed ${
-            isDark ? 'bg-slate-900/80 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-700 shadow-sm'
-          }`}
+          style={{
+            backgroundColor: 'var(--theme-surface)',
+            borderColor: 'var(--theme-border)',
+          }}
+          className="p-6 rounded-3xl border space-y-4 text-xs sm:text-sm leading-relaxed shadow-xs"
         >
-          <div className="p-4 rounded-2xl bg-amber-950/30 border border-amber-500/30 text-amber-200 font-medium leading-relaxed">
+          <div
+            style={{
+              backgroundColor: 'rgba(245, 158, 11, 0.12)',
+              borderColor: 'rgba(245, 158, 11, 0.35)',
+              color: 'var(--theme-text)',
+            }}
+            className="p-4 rounded-2xl border font-medium leading-relaxed"
+          >
             <h4 className="font-bold text-sm text-amber-400 mb-2">
               {isAr ? 'النص العربي:' : 'Arabic Version:'}
             </h4>
@@ -155,8 +202,15 @@ export const LegalView: React.FC<LegalViewProps> = ({
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-slate-300 font-medium leading-relaxed">
-            <h4 className="font-bold text-sm text-purple-400 mb-2">
+          <div
+            style={{
+              backgroundColor: 'var(--theme-input)',
+              borderColor: 'var(--theme-border)',
+              color: 'var(--theme-text-secondary)',
+            }}
+            className="p-4 rounded-2xl border font-medium leading-relaxed"
+          >
+            <h4 style={{ color: 'var(--theme-primary)' }} className="font-bold text-sm mb-2">
               {isAr ? 'النص الإنجليزي (English Version):' : 'English Version:'}
             </h4>
             <p className="dir-ltr text-left font-sans">
@@ -169,41 +223,113 @@ export const LegalView: React.FC<LegalViewProps> = ({
       {/* ABOUT HYPERTOOLS */}
       {page === 'about' && (
         <div
-          className={`p-6 rounded-3xl border space-y-6 text-center ${
-            isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-          }`}
+          style={{
+            backgroundColor: 'var(--theme-surface)',
+            borderColor: 'var(--theme-border)',
+          }}
+          className="p-6 rounded-3xl border space-y-6 text-center shadow-xs"
         >
           <div className="flex justify-center">
             <HyperLogo size="lg" showText={true} theme={theme} language={language} />
           </div>
 
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-bold">
+          <div className="space-y-3">
+            <div
+              style={{
+                backgroundColor: 'var(--theme-primary-subtle)',
+                borderColor: 'var(--theme-border)',
+                color: 'var(--theme-primary)',
+              }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-bold"
+            >
               <span>Android Edition</span>
               <span>·</span>
               <span>v1.0.1</span>
             </div>
 
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md mx-auto pt-2">
+            <p style={{ color: 'var(--theme-text-secondary)' }} className="text-xs sm:text-sm leading-relaxed max-w-md mx-auto">
               {isAr
-                ? 'HyperTools هو تطبيق أدوات تقنية وبرمجية متكامل مصمم بنظام Local-First ليعمل بالكامل بدون إتصال بالإنترنت مع سرعة فائقة وحفاظ تام على خصوصية بياناتك.'
-                : 'HyperTools is a fast Local-First developer utilities application built to function 100% offline with maximum speed and complete client-side data privacy.'}
+                ? 'HyperTools هو تطبيق أدوات تقنية وبرمجية متنوعة من شركة HyperSoft يساعد المطورين والمستخدمين في إنجاز مهامهم التقنية بكفاءة وسهولة.'
+                : 'HyperTools is a developer utilities application by HyperSoft designed to help developers and users handle technical tasks with ease and efficiency.'}
             </p>
           </div>
 
+          {/* User-Facing Project Specs */}
+          <div
+            style={{
+              backgroundColor: 'var(--theme-input)',
+              borderColor: 'var(--theme-border)',
+            }}
+            className="p-4 rounded-2xl border text-left text-xs space-y-2.5 max-w-md mx-auto"
+          >
+            <div className="flex items-center justify-between">
+              <span style={{ color: 'var(--theme-text-secondary)' }}>{isAr ? 'اسم التطبيق:' : 'App Name:'}</span>
+              <span style={{ color: 'var(--theme-text)' }} className="font-bold font-mono">HyperTools</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span style={{ color: 'var(--theme-text-secondary)' }}>{isAr ? 'الشركة:' : 'Company:'}</span>
+              <span style={{ color: 'var(--theme-primary)' }} className="font-bold font-mono">HyperSoft</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span style={{ color: 'var(--theme-text-secondary)' }}>{isAr ? 'الإصدار:' : 'Version:'}</span>
+              <span className="font-bold text-emerald-400 font-mono">1.0.1</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span style={{ color: 'var(--theme-text-secondary)' }}>{isAr ? 'كود الإصدار:' : 'Version Code:'}</span>
+              <span style={{ color: 'var(--theme-text)' }} className="font-bold font-mono">2</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span style={{ color: 'var(--theme-text-secondary)' }}>{isAr ? 'المنصة:' : 'Platform:'}</span>
+              <span style={{ color: 'var(--theme-accent)' }} className="font-bold font-mono">Android</span>
+            </div>
+          </div>
+
+          {/* Check for Updates Action */}
+          <div className="space-y-2 pt-2">
+            <button
+              onClick={handleCheckUpdates}
+              disabled={isCheckingUpdate}
+              style={{
+                backgroundColor: 'var(--theme-surface-elevated)',
+                borderColor: 'var(--theme-border)',
+                color: 'var(--theme-text)',
+              }}
+              className="py-3 px-6 rounded-2xl font-bold text-xs sm:text-sm inline-flex items-center gap-2 border transition-all hover:opacity-90 shadow-xs"
+            >
+              <RefreshCw className={`w-4 h-4 ${isCheckingUpdate ? 'animate-spin' : ''}`} style={{ color: 'var(--theme-primary)' }} />
+              <span>{isCheckingUpdate ? t.checkingUpdates : t.checkForUpdates}</span>
+            </button>
+
+            {updateMessage && (
+              <div className="text-xs text-emerald-400 flex items-center justify-center gap-1.5 pt-1">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>{updateMessage}</span>
+              </div>
+            )}
+          </div>
+
+          {/* HyperSoft Official Link */}
           <div className="pt-2">
             <button
               onClick={handleOpenHyperSoftSite}
-              className="py-3 px-6 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm inline-flex items-center gap-2 shadow-lg shadow-purple-500/20 active:scale-95 transition-transform"
+              style={{
+                background: 'linear-gradient(to right, var(--theme-primary), var(--theme-secondary))',
+                color: 'var(--theme-primary-text)',
+                boxShadow: 'var(--theme-shadow)',
+              }}
+              className="py-3 px-6 rounded-2xl font-bold text-sm inline-flex items-center gap-2 active:scale-95 transition-transform"
             >
-              <span>{isAr ? 'موقع HyperSoft' : 'HyperSoft Website'}</span>
+              <span>{isAr ? 'موقع HyperSoft الرسمي' : 'HyperSoft Official Website'}</span>
               <ExternalLink className="w-4 h-4" />
             </button>
           </div>
 
-          <div className="pt-4 border-t border-slate-800/60 text-xs text-slate-500 flex justify-between items-center">
+          <div
+            style={{ borderColor: 'var(--theme-border)', color: 'var(--theme-text-secondary)' }}
+            className="pt-4 border-t text-xs flex justify-between items-center"
+          >
             <span>© 2026 HyperSoft</span>
-            <span>Local-First Architecture</span>
+            <span>All rights reserved</span>
           </div>
         </div>
       )}

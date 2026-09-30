@@ -8,6 +8,7 @@ interface ToolCardProps {
   language: Language;
   theme: Theme;
   isFavorite: boolean;
+  isRecent?: boolean;
   onSelect: (tool: Tool) => void;
   onToggleFavorite: (toolId: string, e: React.MouseEvent) => void;
 }
@@ -17,38 +18,44 @@ export const ToolCard: React.FC<ToolCardProps> = ({
   language,
   theme,
   isFavorite,
+  isRecent,
   onSelect,
   onToggleFavorite,
 }) => {
-  const isDark = theme === 'dark';
-
   return (
     <div
       onClick={() => onSelect(tool)}
-      className={`group relative rounded-2xl p-4 transition-all duration-200 cursor-pointer flex flex-col justify-between border ${
-        isDark
-          ? 'bg-slate-900/80 hover:bg-slate-800/90 border-slate-800 hover:border-purple-500/50 shadow-md hover:shadow-purple-500/10'
-          : 'bg-white hover:bg-slate-50/90 border-slate-200/80 hover:border-purple-300 shadow-sm hover:shadow-md'
-      }`}
+      style={{
+        backgroundColor: 'var(--theme-card)',
+        borderColor: 'var(--theme-border)',
+      }}
+      className="group relative rounded-2xl p-4 transition-all duration-200 cursor-pointer flex flex-col justify-between border shadow-sm hover:shadow-lg hover:border-[var(--theme-border-hover)]"
     >
       <div>
         {/* Top Header: Icon & Favorite Toggle */}
         <div className="flex items-center justify-between mb-3">
           <div
-            className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center text-white shadow-md shadow-purple-500/10 group-hover:scale-105 transition-transform duration-200`}
+            className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform duration-200`}
           >
             <DynamicIcon name={tool.iconName} className="w-6 h-6 text-white" />
           </div>
 
           <button
             onClick={(e) => onToggleFavorite(tool.id, e)}
-            className={`p-2 rounded-xl transition-colors ${
+            style={
               isFavorite
-                ? 'text-amber-400 bg-amber-400/10'
-                : isDark
-                ? 'text-slate-600 hover:text-slate-300 hover:bg-slate-800'
-                : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'
-            }`}
+                ? {
+                    color: '#fbbf24',
+                    backgroundColor: 'rgba(251, 191, 36, 0.15)',
+                    borderColor: 'rgba(251, 191, 36, 0.35)',
+                  }
+                : {
+                    color: 'var(--theme-text-secondary)',
+                    backgroundColor: 'var(--theme-surface-elevated)',
+                    borderColor: 'transparent',
+                  }
+            }
+            className="p-2 rounded-xl transition-all border hover:border-[var(--theme-border)]"
             title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
           >
             <Star className={`w-4 h-4 ${isFavorite ? 'fill-amber-400' : ''}`} />
@@ -57,43 +64,71 @@ export const ToolCard: React.FC<ToolCardProps> = ({
 
         {/* Tool Title */}
         <h3
-          className={`font-bold text-sm sm:text-base mb-1 line-clamp-1 ${
-            isDark ? 'text-white group-hover:text-purple-300' : 'text-slate-900 group-hover:text-purple-600'
-          }`}
+          style={{ color: 'var(--theme-text)' }}
+          className="font-bold text-sm sm:text-base mb-1 line-clamp-1 group-hover:text-[var(--theme-primary)] transition-colors"
         >
           {language === 'ar' ? tool.titleAr : tool.titleEn}
         </h3>
 
         {/* Tool Description */}
         <p
-          className={`text-xs line-clamp-2 leading-relaxed ${
-            isDark ? 'text-slate-400' : 'text-slate-500'
-          }`}
+          style={{ color: 'var(--theme-text-secondary)' }}
+          className="text-xs line-clamp-2 leading-relaxed"
         >
           {language === 'ar' ? tool.descAr : tool.descEn}
         </p>
       </div>
 
       {/* Footer Badges */}
-      <div className="mt-3 pt-2 border-t border-slate-800/40 dark:border-slate-800 flex items-center justify-between text-[11px]">
+      <div
+        style={{ borderColor: 'var(--theme-border)' }}
+        className="mt-3 pt-2 border-t flex items-center justify-between text-[11px]"
+      >
         <span
-          className={`font-medium ${
-            isDark ? 'text-slate-500' : 'text-slate-400'
-          }`}
+          style={{ color: 'var(--theme-text-secondary)' }}
+          className="font-semibold text-[10px] tracking-wider uppercase"
         >
-          {tool.category.toUpperCase()}
+          {tool.category}
         </span>
 
-        {tool.isPopular && (
-          <span className="bg-purple-500/10 text-purple-400 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-purple-500/20">
-            {language === 'ar' ? 'شائع' : 'Popular'}
-          </span>
-        )}
-        {tool.isNew && (
-          <span className="bg-cyan-500/10 text-cyan-400 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-cyan-500/20">
-            {language === 'ar' ? 'جديد' : 'New'}
-          </span>
-        )}
+        <div className="flex items-center gap-1.5 flex-wrap">
+          {isRecent && (
+            <span
+              style={{
+                backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                borderColor: 'rgba(16, 185, 129, 0.3)',
+                color: 'var(--theme-success, #10b981)',
+              }}
+              className="text-[10px] font-semibold px-2 py-0.5 rounded-full border"
+            >
+              {language === 'ar' ? 'مؤخراً' : 'Recent'}
+            </span>
+          )}
+          {tool.isPopular && (
+            <span
+              style={{
+                backgroundColor: 'var(--theme-primary-subtle)',
+                borderColor: 'var(--theme-border)',
+                color: 'var(--theme-primary)',
+              }}
+              className="text-[10px] font-semibold px-2 py-0.5 rounded-full border"
+            >
+              {language === 'ar' ? 'شائع' : 'Popular'}
+            </span>
+          )}
+          {tool.isNew && (
+            <span
+              style={{
+                backgroundColor: 'rgba(6, 182, 212, 0.15)',
+                borderColor: 'var(--theme-border)',
+                color: 'var(--theme-accent)',
+              }}
+              className="text-[10px] font-semibold px-2 py-0.5 rounded-full border"
+            >
+              {language === 'ar' ? 'جديد' : 'New'}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

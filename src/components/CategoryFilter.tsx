@@ -16,8 +16,6 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
   theme,
   onSelectCategory,
 }) => {
-  const isDark = theme === 'dark';
-
   return (
     <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none scroll-smooth">
       {categories.map((cat) => {
@@ -27,13 +25,21 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
           <button
             key={cat.id}
             onClick={() => onSelectCategory(cat.id)}
-            className={`whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all shrink-0 flex items-center gap-1.5 border ${
+            style={
               isSelected
-                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white border-purple-500/50 shadow-md shadow-purple-500/20'
-                : isDark
-                ? 'bg-slate-900/80 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800'
-                : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-            }`}
+                ? {
+                    background: 'linear-gradient(to right, var(--theme-primary), var(--theme-secondary))',
+                    borderColor: 'var(--theme-border)',
+                    color: 'var(--theme-primary-text)',
+                    boxShadow: 'var(--theme-shadow)',
+                  }
+                : {
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border)',
+                    color: 'var(--theme-text-secondary)',
+                  }
+            }
+            className="whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all shrink-0 flex items-center gap-1.5 border shadow-xs hover:border-[var(--theme-border-hover)] active:scale-95"
           >
             <span>{language === 'ar' ? cat.nameAr : cat.nameEn}</span>
           </button>

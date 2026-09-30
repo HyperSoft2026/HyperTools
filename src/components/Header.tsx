@@ -1,7 +1,7 @@
 import React from 'react';
 import { Language, Theme, TabView } from '../types';
 import { HyperLogo } from './HyperLogo';
-import { Moon, Sun, Globe, Heart, Home, Grid, Sparkles } from 'lucide-react';
+import { Moon, Sun, Globe, Heart, Home, Grid } from 'lucide-react';
 
 interface HeaderProps {
   language: Language;
@@ -26,11 +26,11 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-colors duration-200 border-b ${
-        isDark
-          ? 'bg-slate-900/90 border-slate-800 text-white backdrop-blur-md'
-          : 'bg-white/90 border-slate-200 text-slate-900 backdrop-blur-md'
-      }`}
+      style={{
+        backgroundColor: 'var(--theme-nav-bg)',
+        borderColor: 'var(--theme-border)',
+      }}
+      className="sticky top-0 z-40 w-full transition-colors duration-200 border-b backdrop-blur-md"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Zone 1: Brand Mark */}
@@ -42,14 +42,27 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Zone 2: Navigation Links (Desktop) */}
-        <nav className="hidden md:flex items-center gap-1 bg-slate-800/40 dark:bg-slate-800/60 p-1 rounded-xl border border-slate-700/50">
+        <nav
+          style={{
+            backgroundColor: 'var(--theme-surface-elevated)',
+            borderColor: 'var(--theme-border)',
+          }}
+          className="hidden md:flex items-center gap-1 p-1 rounded-xl border"
+        >
           <button
             onClick={() => onSelectTab('home')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            style={
               activeTab === 'home'
-                ? 'bg-purple-600 text-white shadow-sm shadow-purple-500/30'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800'
-            }`}
+                ? {
+                    background: 'linear-gradient(to right, var(--theme-primary), var(--theme-secondary))',
+                    color: 'var(--theme-primary-text)',
+                    boxShadow: 'var(--theme-shadow)',
+                  }
+                : {
+                    color: 'var(--theme-text-secondary)',
+                  }
+            }
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90"
           >
             <Home className="w-4 h-4" />
             <span>{language === 'ar' ? 'الرئيسية' : 'Home'}</span>
@@ -57,11 +70,18 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => onSelectTab('tools')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            style={
               activeTab === 'tools' || activeTab === 'tool-detail'
-                ? 'bg-purple-600 text-white shadow-sm shadow-purple-500/30'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800'
-            }`}
+                ? {
+                    background: 'linear-gradient(to right, var(--theme-primary), var(--theme-secondary))',
+                    color: 'var(--theme-primary-text)',
+                    boxShadow: 'var(--theme-shadow)',
+                  }
+                : {
+                    color: 'var(--theme-text-secondary)',
+                  }
+            }
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90"
           >
             <Grid className="w-4 h-4" />
             <span>{language === 'ar' ? 'الأدوات' : 'Tools'}</span>
@@ -69,16 +89,29 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => onSelectTab('favorites')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all relative ${
+            style={
               activeTab === 'favorites'
-                ? 'bg-purple-600 text-white shadow-sm shadow-purple-500/30'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800'
-            }`}
+                ? {
+                    background: 'linear-gradient(to right, var(--theme-primary), var(--theme-secondary))',
+                    color: 'var(--theme-primary-text)',
+                    boxShadow: 'var(--theme-shadow)',
+                  }
+                : {
+                    color: 'var(--theme-text-secondary)',
+                  }
+            }
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all relative hover:opacity-90"
           >
             <Heart className="w-4 h-4 fill-current" />
             <span>{language === 'ar' ? 'المفضلة' : 'Favorites'}</span>
             {favoritesCount > 0 && (
-              <span className="bg-pink-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full min-w-[18px] text-center">
+              <span
+                style={{
+                  backgroundColor: 'var(--theme-accent)',
+                  color: '#ffffff',
+                }}
+                className="text-[10px] font-bold px-1.5 py-0.2 rounded-full min-w-[18px] text-center shadow-xs"
+              >
                 {favoritesCount}
               </span>
             )}
@@ -90,11 +123,12 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Language Switcher */}
           <button
             onClick={onLanguageToggle}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
-              isDark
-                ? 'bg-slate-800/80 border-slate-700/80 text-purple-300 hover:bg-slate-700 hover:text-white'
-                : 'bg-slate-100 border-slate-200 text-purple-700 hover:bg-slate-200'
-            }`}
+            style={{
+              backgroundColor: 'var(--theme-surface-elevated)',
+              borderColor: 'var(--theme-border)',
+              color: 'var(--theme-primary)',
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border hover:opacity-90 shadow-xs"
             title={language === 'ar' ? 'Switch to English' : 'التحويل للعربية'}
           >
             <Globe className="w-3.5 h-3.5" />
@@ -104,14 +138,18 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Theme Switcher */}
           <button
             onClick={onThemeToggle}
-            className={`p-2 rounded-xl transition-all border ${
-              isDark
-                ? 'bg-slate-800/80 border-slate-700/80 text-amber-400 hover:bg-slate-700'
-                : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200'
-            }`}
-            title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            style={{
+              backgroundColor: 'var(--theme-surface-elevated)',
+              borderColor: 'var(--theme-border)',
+            }}
+            className="p-2 rounded-xl transition-all border hover:opacity-90 shadow-xs"
+            title={isDark ? 'Switch to Light Mode' : 'التحويل للوضع الداكن'}
           >
-            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            {isDark ? (
+              <Sun className="w-4 h-4 text-amber-400" />
+            ) : (
+              <Moon style={{ color: 'var(--theme-primary)' }} className="w-4 h-4" />
+            )}
           </button>
         </div>
       </div>

@@ -17,8 +17,6 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   favoritesCount,
   onSelectTab,
 }) => {
-  const isDark = theme === 'dark';
-
   const navItems = [
     {
       id: 'home' as TabView,
@@ -49,11 +47,11 @@ export const BottomNav: React.FC<BottomNavProps> = ({
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-40 md:hidden border-t transition-colors duration-200 ${
-        isDark
-          ? 'bg-slate-900/95 border-slate-800 text-slate-300 backdrop-blur-lg'
-          : 'bg-white/95 border-slate-200 text-slate-600 backdrop-blur-lg shadow-lg'
-      }`}
+      style={{
+        backgroundColor: 'var(--theme-nav-bg)',
+        borderColor: 'var(--theme-border)',
+      }}
+      className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t transition-colors duration-200 backdrop-blur-lg shadow-lg"
     >
       <div className="grid grid-cols-4 h-16 max-w-md mx-auto items-center px-2">
         {navItems.map((item) => {
@@ -65,12 +63,13 @@ export const BottomNav: React.FC<BottomNavProps> = ({
             <button
               key={item.id}
               onClick={() => onSelectTab(item.id)}
-              className={`flex flex-col items-center justify-center h-full w-full relative transition-all active:scale-95 ${
+              style={
                 isActive
-                  ? 'text-purple-500 font-bold'
-                  : isDark
-                  ? 'text-slate-400 hover:text-slate-200'
-                  : 'text-slate-500 hover:text-slate-800'
+                  ? { color: 'var(--theme-primary)' }
+                  : { color: 'var(--theme-text-secondary)' }
+              }
+              className={`flex flex-col items-center justify-center h-full w-full relative transition-all active:scale-95 ${
+                isActive ? 'font-bold' : ''
               }`}
             >
               <div className="relative">
@@ -80,7 +79,13 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                   }`}
                 />
                 {item.badge && (
-                  <span className="absolute -top-1.5 -right-2.5 bg-pink-500 text-white text-[9px] font-black px-1 py-0.2 rounded-full min-w-[15px] text-center shadow-sm">
+                  <span
+                    style={{
+                      backgroundColor: 'var(--theme-accent)',
+                      color: '#ffffff',
+                    }}
+                    className="absolute -top-1.5 -right-2.5 text-[9px] font-black px-1 py-0.2 rounded-full min-w-[15px] text-center shadow-xs"
+                  >
                     {item.badge}
                   </span>
                 )}
@@ -89,7 +94,13 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                 {language === 'ar' ? item.labelAr : item.labelEn}
               </span>
               {isActive && (
-                <span className="absolute bottom-1 w-1 h-1 rounded-full bg-purple-500" />
+                <span
+                  style={{
+                    backgroundColor: 'var(--theme-primary)',
+                    boxShadow: '0 0 8px var(--theme-primary)',
+                  }}
+                  className="absolute bottom-1 w-1.5 h-1.5 rounded-full"
+                />
               )}
             </button>
           );

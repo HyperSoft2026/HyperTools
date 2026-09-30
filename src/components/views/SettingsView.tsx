@@ -1,10 +1,13 @@
 import React from 'react';
-import { Language, Theme, LegalPage } from '../../types';
+import { Language, Theme, LegalPage, AppTheme } from '../../types';
 import { HyperLogo } from '../HyperLogo';
+import { ThemeSelector } from '../ThemeSelector';
+import { appThemes } from '../../data/themes';
 import {
   Globe,
   Sun,
   Moon,
+  Palette,
   ShieldCheck,
   FileText,
   AlertTriangle,
@@ -19,8 +22,10 @@ import { translations } from '../../data/translations';
 interface SettingsViewProps {
   language: Language;
   theme: Theme;
+  appTheme: AppTheme;
   onLanguageToggle: () => void;
   onThemeToggle: () => void;
+  onSelectAppTheme: (theme: AppTheme) => void;
   onSelectLegal: (page: LegalPage) => void;
   onOpenRewardModal: () => void;
 }
@@ -28,8 +33,10 @@ interface SettingsViewProps {
 export const SettingsView: React.FC<SettingsViewProps> = ({
   language,
   theme,
+  appTheme,
   onLanguageToggle,
   onThemeToggle,
+  onSelectAppTheme,
   onSelectLegal,
   onOpenRewardModal,
 }) => {
@@ -42,14 +49,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     window.open('https://51.75.118.17:20137', '_blank', 'noopener,noreferrer');
   };
 
+  const currentThemeObj = appThemes.find((item) => item.id === appTheme);
+
   return (
     <div className="space-y-6 pb-20 max-w-2xl mx-auto">
       {/* Header */}
       <div className="space-y-1">
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
+        <h1 style={{ color: 'var(--theme-text)' }} className="text-xl sm:text-2xl font-bold tracking-tight">
           {t.settings}
         </h1>
-        <p className="text-xs sm:text-sm text-slate-400">
+        <p style={{ color: 'var(--theme-text-secondary)' }} className="text-xs sm:text-sm">
           {isAr
             ? 'تخصيص تفضيلات التطبيق واللغة والمظهر والمعلومات القانونية.'
             : 'Customize app options, language, theme, and view legal policies.'}
@@ -58,16 +67,23 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* Language & Theme Controls */}
       <div
-        className={`p-5 rounded-2xl border space-y-4 ${
-          isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-        }`}
+        style={{
+          backgroundColor: 'var(--theme-surface)',
+          borderColor: 'var(--theme-border)',
+        }}
+        className="p-5 rounded-2xl border space-y-4 shadow-xs"
       >
-        <div className="flex items-center justify-between py-2 border-b border-slate-800/60">
+        <div
+          style={{ borderColor: 'var(--theme-border)' }}
+          className="flex items-center justify-between py-2 border-b"
+        >
           <div className="flex items-center gap-3">
-            <Globe className="w-5 h-5 text-purple-400" />
+            <Globe style={{ color: 'var(--theme-primary)' }} className="w-5 h-5" />
             <div>
-              <div className="text-sm font-bold">{t.language}</div>
-              <div className="text-xs text-slate-400">
+              <div style={{ color: 'var(--theme-text)' }} className="text-sm font-bold">
+                {t.language}
+              </div>
+              <div style={{ color: 'var(--theme-text-secondary)' }} className="text-xs">
                 {isAr ? 'العربية (RTL)' : 'English (LTR)'}
               </div>
             </div>
@@ -75,7 +91,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           <button
             onClick={onLanguageToggle}
-            className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition-colors"
+            style={{
+              background: 'linear-gradient(to right, var(--theme-primary), var(--theme-secondary))',
+              color: 'var(--theme-primary-text)',
+              boxShadow: 'var(--theme-shadow)',
+            }}
+            className="px-4 py-2 rounded-xl font-bold text-xs transition-opacity hover:opacity-90 shadow-xs"
           >
             {isAr ? 'Switch to English' : 'التحويل للعربية'}
           </button>
@@ -86,11 +107,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             {isDark ? (
               <Sun className="w-5 h-5 text-amber-400" />
             ) : (
-              <Moon className="w-5 h-5 text-purple-500" />
+              <Moon style={{ color: 'var(--theme-primary)' }} className="w-5 h-5" />
             )}
             <div>
-              <div className="text-sm font-bold">{t.theme}</div>
-              <div className="text-xs text-slate-400">
+              <div style={{ color: 'var(--theme-text)' }} className="text-sm font-bold">
+                {t.theme}
+              </div>
+              <div style={{ color: 'var(--theme-text-secondary)' }} className="text-xs">
                 {isDark ? t.darkMode : t.lightMode}
               </div>
             </div>
@@ -98,34 +121,67 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           <button
             onClick={onThemeToggle}
-            className={`px-4 py-2 rounded-xl border font-bold text-xs transition-colors ${
-              isDark
-                ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700'
-                : 'bg-slate-100 border-slate-200 text-slate-800 hover:bg-slate-200'
-            }`}
+            style={{
+              backgroundColor: 'var(--theme-surface-elevated)',
+              borderColor: 'var(--theme-border)',
+              color: 'var(--theme-text)',
+            }}
+            className="px-4 py-2 rounded-xl border font-bold text-xs transition-colors hover:opacity-90 shadow-xs"
           >
             {isDark ? 'Light' : 'Dark'}
           </button>
         </div>
       </div>
 
+      {/* App Themes Section (6 Themes with Previews) */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between text-xs font-bold px-1">
+          <div className="flex items-center gap-2">
+            <Palette style={{ color: 'var(--theme-primary)' }} className="w-4 h-4" />
+            <span style={{ color: 'var(--theme-text)' }}>
+              {isAr ? 'مظهر التطبيق (App Themes)' : 'App Theme & Style'}
+            </span>
+          </div>
+          <span
+            style={{ color: 'var(--theme-primary)' }}
+            className="text-[11px] font-bold font-mono"
+          >
+            {currentThemeObj?.[isAr ? 'nameAr' : 'nameEn']}
+          </span>
+        </div>
+
+        <ThemeSelector
+          currentTheme={appTheme}
+          language={language}
+          theme={theme}
+          onSelectTheme={onSelectAppTheme}
+        />
+      </div>
+
       {/* Optional AdMob Reward Trigger */}
       <div
-        className={`p-4 rounded-2xl border flex items-center justify-between ${
-          isDark
-            ? 'bg-gradient-to-r from-purple-950/40 to-indigo-950/40 border-purple-500/30'
-            : 'bg-purple-50 border-purple-200 shadow-sm'
-        }`}
+        style={{
+          background: 'var(--theme-hero-gradient)',
+          borderColor: 'var(--theme-hero-border)',
+          boxShadow: 'var(--theme-shadow)',
+        }}
+        className="p-4 rounded-2xl border flex items-center justify-between shadow-md"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+          <div
+            style={{
+              backgroundColor: 'var(--theme-primary-subtle)',
+              color: 'var(--theme-primary)',
+            }}
+            className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border border-current"
+          >
             <Gift className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-bold text-white">
+            <div style={{ color: 'var(--theme-text)' }} className="text-xs font-bold">
               {isAr ? 'شاهد إعلان لفتح ميزة (Rewarded)' : 'Watch Ad for Reward'}
             </div>
-            <div className="text-[11px] text-slate-400">
+            <div style={{ color: 'var(--theme-text-secondary)' }} className="text-[11px]">
               {isAr ? 'احصل على مكافأة مشاهدة الإعلان' : 'Watch an ad to unlock items'}
             </div>
           </div>
@@ -133,7 +189,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
         <button
           onClick={onOpenRewardModal}
-          className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition-colors shadow-sm"
+          style={{
+            background: 'linear-gradient(to right, var(--theme-primary), var(--theme-secondary))',
+            color: 'var(--theme-primary-text)',
+          }}
+          className="px-3.5 py-2 rounded-xl font-bold text-xs transition-opacity hover:opacity-90 shadow-xs"
         >
           {isAr ? 'فتح' : 'Watch'}
         </button>
@@ -141,104 +201,114 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* Information & Legal Section */}
       <div className="space-y-3">
-        <div className="text-xs font-bold text-slate-400 px-1">
+        <div style={{ color: 'var(--theme-text-secondary)' }} className="text-xs font-bold px-1">
           {t.infoAndLegal}
         </div>
 
         <div
-          className={`rounded-2xl border divide-y overflow-hidden ${
-            isDark
-              ? 'bg-slate-900/80 border-slate-800 divide-slate-800/80'
-              : 'bg-white border-slate-200 divide-slate-100 shadow-sm'
-          }`}
+          style={{
+            backgroundColor: 'var(--theme-surface)',
+            borderColor: 'var(--theme-border)',
+          }}
+          className="rounded-2xl border divide-y overflow-hidden shadow-xs"
         >
           {/* Privacy Policy */}
           <button
             onClick={() => onSelectLegal('privacy')}
-            className={`w-full p-4 text-left flex items-center justify-between transition-colors ${
-              isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
-            }`}
+            style={{ borderColor: 'var(--theme-border)' }}
+            className="w-full p-4 text-left flex items-center justify-between transition-colors hover:bg-black/5 dark:hover:bg-white/5"
           >
             <div className="flex items-center gap-3">
               <ShieldCheck className="w-5 h-5 text-emerald-400" />
-              <span className="text-sm font-semibold">{t.privacyPolicy}</span>
+              <span style={{ color: 'var(--theme-text)' }} className="text-sm font-semibold">
+                {t.privacyPolicy}
+              </span>
             </div>
-            <ChevronIcon className="w-4 h-4 text-slate-500" />
+            <ChevronIcon style={{ color: 'var(--theme-text-secondary)' }} className="w-4 h-4" />
           </button>
 
           {/* Terms of Use */}
           <button
             onClick={() => onSelectLegal('terms')}
-            className={`w-full p-4 text-left flex items-center justify-between transition-colors ${
-              isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
-            }`}
+            style={{ borderColor: 'var(--theme-border)' }}
+            className="w-full p-4 text-left flex items-center justify-between transition-colors hover:bg-black/5 dark:hover:bg-white/5"
           >
             <div className="flex items-center gap-3">
-              <FileText className="w-5 h-5 text-purple-400" />
-              <span className="text-sm font-semibold">{t.termsOfUse}</span>
+              <FileText style={{ color: 'var(--theme-primary)' }} className="w-5 h-5" />
+              <span style={{ color: 'var(--theme-text)' }} className="text-sm font-semibold">
+                {t.termsOfUse}
+              </span>
             </div>
-            <ChevronIcon className="w-4 h-4 text-slate-500" />
+            <ChevronIcon style={{ color: 'var(--theme-text-secondary)' }} className="w-4 h-4" />
           </button>
 
           {/* Disclaimer */}
           <button
             onClick={() => onSelectLegal('disclaimer')}
-            className={`w-full p-4 text-left flex items-center justify-between transition-colors ${
-              isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
-            }`}
+            style={{ borderColor: 'var(--theme-border)' }}
+            className="w-full p-4 text-left flex items-center justify-between transition-colors hover:bg-black/5 dark:hover:bg-white/5"
           >
             <div className="flex items-center gap-3">
               <AlertTriangle className="w-5 h-5 text-amber-400" />
-              <span className="text-sm font-semibold">{t.disclaimer}</span>
+              <span style={{ color: 'var(--theme-text)' }} className="text-sm font-semibold">
+                {t.disclaimer}
+              </span>
             </div>
-            <ChevronIcon className="w-4 h-4 text-slate-500" />
+            <ChevronIcon style={{ color: 'var(--theme-text-secondary)' }} className="w-4 h-4" />
           </button>
 
           {/* About HyperTools */}
           <button
             onClick={() => onSelectLegal('about')}
-            className={`w-full p-4 text-left flex items-center justify-between transition-colors ${
-              isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
-            }`}
+            style={{ borderColor: 'var(--theme-border)' }}
+            className="w-full p-4 text-left flex items-center justify-between transition-colors hover:bg-black/5 dark:hover:bg-white/5"
           >
             <div className="flex items-center gap-3">
-              <Info className="w-5 h-5 text-cyan-400" />
-              <span className="text-sm font-semibold">{t.aboutAppTitle}</span>
+              <Info style={{ color: 'var(--theme-accent)' }} className="w-5 h-5" />
+              <span style={{ color: 'var(--theme-text)' }} className="text-sm font-semibold">
+                {t.aboutAppTitle}
+              </span>
             </div>
-            <ChevronIcon className="w-4 h-4 text-slate-500" />
+            <ChevronIcon style={{ color: 'var(--theme-text-secondary)' }} className="w-4 h-4" />
           </button>
 
           {/* HyperSoft Website */}
           <button
             onClick={handleOpenWebsite}
-            className={`w-full p-4 text-left flex items-center justify-between transition-colors ${
-              isDark ? 'hover:bg-slate-800/60' : 'hover:bg-slate-50'
-            }`}
+            style={{ borderColor: 'var(--theme-border)' }}
+            className="w-full p-4 text-left flex items-center justify-between transition-colors hover:bg-black/5 dark:hover:bg-white/5"
           >
             <div className="flex items-center gap-3">
-              <ExternalLink className="w-5 h-5 text-indigo-400" />
-              <span className="text-sm font-semibold">{t.hyperSoftWebsite}</span>
+              <ExternalLink style={{ color: 'var(--theme-secondary)' }} className="w-5 h-5" />
+              <span style={{ color: 'var(--theme-text)' }} className="text-sm font-semibold">
+                {t.hyperSoftWebsite}
+              </span>
             </div>
-            <ExternalLink className="w-4 h-4 text-slate-500" />
+            <ExternalLink style={{ color: 'var(--theme-text-secondary)' }} className="w-4 h-4" />
           </button>
         </div>
       </div>
 
       {/* HyperSoft About Branding */}
       <div
-        className={`p-6 rounded-2xl border space-y-4 text-center ${
-          isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-        }`}
+        style={{
+          backgroundColor: 'var(--theme-surface)',
+          borderColor: 'var(--theme-border)',
+        }}
+        className="p-6 rounded-2xl border space-y-4 text-center shadow-xs"
       >
         <div className="flex justify-center">
           <HyperLogo size="lg" showText={true} theme={theme} language={language} />
         </div>
 
-        <p className="text-xs text-slate-400 leading-relaxed max-w-md mx-auto">
+        <p style={{ color: 'var(--theme-text-secondary)' }} className="text-xs leading-relaxed max-w-md mx-auto">
           {t.aboutApp}
         </p>
 
-        <div className="pt-2 border-t border-slate-800/60 text-[11px] text-slate-500 flex items-center justify-between font-mono">
+        <div
+          style={{ borderColor: 'var(--theme-border)', color: 'var(--theme-text-secondary)' }}
+          className="pt-2 border-t text-[11px] flex items-center justify-between font-mono"
+        >
           <span>v1.0.1 (Android Edition)</span>
           <span>HyperTools By HyperSoft</span>
         </div>

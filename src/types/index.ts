@@ -10,6 +10,8 @@ export interface Category {
   iconName: string;
 }
 
+export type AppTheme = 'professional' | 'arabic' | 'babylonian' | 'pharaonic' | 'sumerian' | 'modern';
+
 export type ToolId =
   | 'password-gen'
   | 'color-converter'
@@ -25,7 +27,12 @@ export type ToolId =
   | 'hash-gen'
   | 'jwt-decoder'
   | 'regex-tester'
-  | 'css-generator';
+  | 'css-generator'
+  | 'text-diff'
+  | 'sql-formatter'
+  | 'html-formatter'
+  | 'chmod-calculator'
+  | 'cron-builder';
 
 export interface Tool {
   id: ToolId;
@@ -39,6 +46,7 @@ export interface Tool {
   gradient: string;
   isPopular?: boolean;
   isNew?: boolean;
+  keywords?: string[];
 }
 
 export type TabView = 'home' | 'tools' | 'favorites' | 'settings' | 'tool-detail' | 'legal';
