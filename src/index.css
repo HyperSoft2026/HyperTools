@@ -63,14 +63,15 @@ input[type="number"] {
    1. HYPERSOFT PROFESSIONAL (DEFAULT)
    -------------------------------------------------------- */
 :root,
-[data-app-theme="professional"] {
+html[data-app-theme="professional"],
+html.dark[data-app-theme="professional"] {
   --theme-bg: #0a0e17;
   --theme-surface: #111827;
   --theme-surface-elevated: #1f293d;
   --theme-card: #0f172a;
   --theme-card-hover: #1e293b;
   --theme-border: rgba(147, 51, 234, 0.35);
-  --theme-border-hover: rgba(168, 85, 247, 0.7);
+  --theme-border-hover: rgba(168, 85, 247, 0.75);
   --theme-text: #f8fafc;
   --theme-text-secondary: #94a3b8;
   --theme-primary: #9333ea;
@@ -82,15 +83,16 @@ input[type="number"] {
   --theme-success: #10b981;
   --theme-warning: #f59e0b;
   --theme-danger: #ef4444;
-  --theme-input: #0a0f1d;
-  --theme-input-border: #1e293b;
+  --theme-input: #090d16;
+  --theme-input-border: rgba(147, 51, 234, 0.3);
   --theme-input-text: #ffffff;
+  --theme-navbar: rgba(15, 23, 42, 0.95);
   --theme-nav-bg: rgba(15, 23, 42, 0.95);
-  --theme-shadow: 0 10px 30px -5px rgba(147, 51, 234, 0.25);
+  --theme-shadow: 0 10px 30px -5px rgba(147, 51, 234, 0.3);
   --theme-glow: 0 0 20px rgba(147, 51, 234, 0.4);
   --theme-gradient-start: #9333ea;
   --theme-gradient-end: #6366f1;
-  --theme-hero-gradient: linear-gradient(135deg, rgba(88, 28, 135, 0.65) 0%, rgba(15, 23, 42, 0.95) 50%, rgba(49, 46, 129, 0.6) 100%);
+  --theme-hero-gradient: linear-gradient(135deg, rgba(88, 28, 135, 0.7) 0%, rgba(15, 23, 42, 0.95) 50%, rgba(49, 46, 129, 0.7) 100%);
   --theme-hero-border: rgba(147, 51, 234, 0.45);
   --theme-brand-from: #c084fc;
   --theme-brand-via: #818cf8;
@@ -98,8 +100,7 @@ input[type="number"] {
   --theme-pattern: radial-gradient(rgba(147, 51, 234, 0.15) 1.5px, transparent 1.5px);
 }
 
-html:not(.dark)[data-app-theme="professional"],
-:root:not(.dark)[data-app-theme="professional"] {
+html:not(.dark)[data-app-theme="professional"] {
   --theme-bg: #f8fafc;
   --theme-surface: #ffffff;
   --theme-surface-elevated: #f1f5f9;
@@ -115,12 +116,18 @@ html:not(.dark)[data-app-theme="professional"],
   --theme-primary-subtle: rgba(126, 34, 206, 0.1);
   --theme-secondary: #4f46e5;
   --theme-accent: #0891b2;
+  --theme-success: #059669;
+  --theme-warning: #d97706;
+  --theme-danger: #dc2626;
   --theme-input: #ffffff;
   --theme-input-border: #cbd5e1;
   --theme-input-text: #0f172a;
+  --theme-navbar: rgba(255, 255, 255, 0.96);
   --theme-nav-bg: rgba(255, 255, 255, 0.96);
   --theme-shadow: 0 6px 20px -2px rgba(126, 34, 206, 0.15);
   --theme-glow: 0 0 15px rgba(126, 34, 206, 0.25);
+  --theme-gradient-start: #7e22ce;
+  --theme-gradient-end: #4f46e5;
   --theme-hero-gradient: linear-gradient(135deg, #ede9fe 0%, #ffffff 50%, #e0e7ff 100%);
   --theme-hero-border: #ddd6fe;
   --theme-brand-from: #7e22ce;
@@ -132,19 +139,20 @@ html:not(.dark)[data-app-theme="professional"],
 /* --------------------------------------------------------
    2. MODERN ARABIC (WARM ROYAL GOLD & JADE EMERALD)
    -------------------------------------------------------- */
-[data-app-theme="arabic"] {
+html[data-app-theme="arabic"],
+html.dark[data-app-theme="arabic"] {
   --theme-bg: #081410;
   --theme-surface: #0f241d;
   --theme-surface-elevated: #17352a;
   --theme-card: #112720;
   --theme-card-hover: #1b3a30;
   --theme-border: rgba(217, 119, 6, 0.45);
-  --theme-border-hover: rgba(245, 158, 11, 0.8);
+  --theme-border-hover: rgba(245, 158, 11, 0.85);
   --theme-text: #fef3c7;
-  --theme-text-secondary: #cbd5e1;
+  --theme-text-secondary: #9ca3af;
   --theme-primary: #d97706;
   --theme-primary-hover: #f59e0b;
-  --theme-primary-text: #042014;
+  --theme-primary-text: #081410;
   --theme-primary-subtle: rgba(217, 119, 6, 0.2);
   --theme-secondary: #059669;
   --theme-accent: #10b981;
@@ -154,13 +162,14 @@ html:not(.dark)[data-app-theme="professional"],
   --theme-input: #091813;
   --theme-input-border: #1c3c30;
   --theme-input-text: #fef3c7;
+  --theme-navbar: rgba(15, 36, 29, 0.96);
   --theme-nav-bg: rgba(15, 36, 29, 0.96);
-  --theme-shadow: 0 10px 30px -5px rgba(217, 119, 6, 0.3);
-  --theme-glow: 0 0 22px rgba(217, 119, 6, 0.45);
+  --theme-shadow: 0 10px 30px -5px rgba(217, 119, 6, 0.35);
+  --theme-glow: 0 0 25px rgba(217, 119, 6, 0.5);
   --theme-gradient-start: #d97706;
   --theme-gradient-end: #059669;
-  --theme-hero-gradient: linear-gradient(135deg, rgba(180, 83, 9, 0.65) 0%, rgba(6, 78, 59, 0.7) 50%, rgba(15, 36, 29, 0.98) 100%);
-  --theme-hero-border: rgba(245, 158, 11, 0.55);
+  --theme-hero-gradient: linear-gradient(135deg, rgba(180, 83, 9, 0.75) 0%, rgba(6, 78, 59, 0.75) 50%, rgba(15, 36, 29, 0.98) 100%);
+  --theme-hero-border: rgba(245, 158, 11, 0.6);
   --theme-brand-from: #fbbf24;
   --theme-brand-via: #34d399;
   --theme-brand-to: #f59e0b;
@@ -168,7 +177,7 @@ html:not(.dark)[data-app-theme="professional"],
 }
 
 html:not(.dark)[data-app-theme="arabic"] {
-  --theme-bg: #fcfaf4;
+  --theme-bg: #fcf9f2;
   --theme-surface: #ffffff;
   --theme-surface-elevated: #fef3c7;
   --theme-card: #ffffff;
@@ -183,12 +192,18 @@ html:not(.dark)[data-app-theme="arabic"] {
   --theme-primary-subtle: rgba(180, 83, 9, 0.12);
   --theme-secondary: #047857;
   --theme-accent: #d97706;
+  --theme-success: #047857;
+  --theme-warning: #d97706;
+  --theme-danger: #b91c1c;
   --theme-input: #ffffff;
   --theme-input-border: #fde68a;
   --theme-input-text: #1c1917;
+  --theme-navbar: rgba(255, 255, 255, 0.96);
   --theme-nav-bg: rgba(255, 255, 255, 0.96);
-  --theme-shadow: 0 6px 20px -2px rgba(180, 83, 9, 0.16);
+  --theme-shadow: 0 6px 20px -2px rgba(180, 83, 9, 0.18);
   --theme-glow: 0 0 15px rgba(180, 83, 9, 0.25);
+  --theme-gradient-start: #b45309;
+  --theme-gradient-end: #047857;
   --theme-hero-gradient: linear-gradient(135deg, #fef3c7 0%, #ffffff 50%, #d1fae5 100%);
   --theme-hero-border: #fcd34d;
   --theme-brand-from: #b45309;
@@ -200,14 +215,15 @@ html:not(.dark)[data-app-theme="arabic"] {
 /* --------------------------------------------------------
    3. BABYLONIAN HERITAGE (TERRACOTTA & ISHTAR LAPIS)
    -------------------------------------------------------- */
-[data-app-theme="babylonian"] {
+html[data-app-theme="babylonian"],
+html.dark[data-app-theme="babylonian"] {
   --theme-bg: #120c08;
   --theme-surface: #1e130c;
   --theme-surface-elevated: #2d1c12;
   --theme-card: #20140d;
   --theme-card-hover: #2f1d13;
-  --theme-border: rgba(194, 65, 12, 0.5);
-  --theme-border-hover: rgba(234, 88, 12, 0.8);
+  --theme-border: rgba(234, 88, 12, 0.5);
+  --theme-border-hover: rgba(249, 115, 22, 0.85);
   --theme-text: #fed7aa;
   --theme-text-secondary: #cbd5e1;
   --theme-primary: #ea580c;
@@ -222,21 +238,22 @@ html:not(.dark)[data-app-theme="arabic"] {
   --theme-input: #140d08;
   --theme-input-border: #362114;
   --theme-input-text: #fed7aa;
+  --theme-navbar: rgba(30, 19, 12, 0.96);
   --theme-nav-bg: rgba(30, 19, 12, 0.96);
-  --theme-shadow: 0 10px 30px -5px rgba(234, 88, 12, 0.3);
-  --theme-glow: 0 0 22px rgba(234, 88, 12, 0.45);
+  --theme-shadow: 0 10px 30px -5px rgba(234, 88, 12, 0.35);
+  --theme-glow: 0 0 25px rgba(234, 88, 12, 0.45);
   --theme-gradient-start: #ea580c;
   --theme-gradient-end: #2563eb;
-  --theme-hero-gradient: linear-gradient(135deg, rgba(194, 65, 12, 0.65) 0%, rgba(29, 78, 216, 0.6) 50%, rgba(30, 19, 12, 0.98) 100%);
-  --theme-hero-border: rgba(234, 88, 12, 0.55);
+  --theme-hero-gradient: linear-gradient(135deg, rgba(194, 65, 12, 0.75) 0%, rgba(29, 78, 216, 0.65) 50%, rgba(30, 19, 12, 0.98) 100%);
+  --theme-hero-border: rgba(234, 88, 12, 0.6);
   --theme-brand-from: #fb923c;
   --theme-brand-via: #60a5fa;
   --theme-brand-to: #f59e0b;
-  --theme-pattern: radial-gradient(rgba(234, 88, 12, 0.2) 1.5px, transparent 1.5px), radial-gradient(rgba(37, 99, 235, 0.16) 1.5px, transparent 1.5px);
+  --theme-pattern: radial-gradient(rgba(234, 88, 12, 0.22) 1.5px, transparent 1.5px), radial-gradient(rgba(37, 99, 235, 0.18) 1.5px, transparent 1.5px);
 }
 
 html:not(.dark)[data-app-theme="babylonian"] {
-  --theme-bg: #fbf6ee;
+  --theme-bg: #fcf7ef;
   --theme-surface: #ffffff;
   --theme-surface-elevated: #ffedd5;
   --theme-card: #ffffff;
@@ -251,12 +268,18 @@ html:not(.dark)[data-app-theme="babylonian"] {
   --theme-primary-subtle: rgba(194, 65, 12, 0.12);
   --theme-secondary: #1d4ed8;
   --theme-accent: #b45309;
+  --theme-success: #059669;
+  --theme-warning: #d97706;
+  --theme-danger: #b91c1c;
   --theme-input: #ffffff;
   --theme-input-border: #fed7aa;
   --theme-input-text: #291508;
+  --theme-navbar: rgba(255, 255, 255, 0.96);
   --theme-nav-bg: rgba(255, 255, 255, 0.96);
   --theme-shadow: 0 6px 20px -2px rgba(194, 65, 12, 0.16);
   --theme-glow: 0 0 15px rgba(194, 65, 12, 0.25);
+  --theme-gradient-start: #c2410c;
+  --theme-gradient-end: #1d4ed8;
   --theme-hero-gradient: linear-gradient(135deg, #ffedd5 0%, #ffffff 50%, #dbeafe 100%);
   --theme-hero-border: #fdba74;
   --theme-brand-from: #c2410c;
@@ -268,35 +291,37 @@ html:not(.dark)[data-app-theme="babylonian"] {
 /* --------------------------------------------------------
    4. ROYAL PHARAONIC (IMPERIAL GOLD & NILE COBALT)
    -------------------------------------------------------- */
-[data-app-theme="pharaonic"] {
-  --theme-bg: #0a0d18;
-  --theme-surface: #11172a;
-  --theme-surface-elevated: #1a233e;
-  --theme-card: #131a30;
-  --theme-card-hover: #1c2747;
+html[data-app-theme="pharaonic"],
+html.dark[data-app-theme="pharaonic"] {
+  --theme-bg: #090c17;
+  --theme-surface: #10162a;
+  --theme-surface-elevated: #19223e;
+  --theme-card: #121930;
+  --theme-card-hover: #1a2546;
   --theme-border: rgba(234, 179, 8, 0.5);
   --theme-border-hover: rgba(250, 204, 21, 0.85);
   --theme-text: #fef9c3;
   --theme-text-secondary: #94a3b8;
   --theme-primary: #eab308;
   --theme-primary-hover: #facc15;
-  --theme-primary-text: #0f172a;
+  --theme-primary-text: #0a0d18;
   --theme-primary-subtle: rgba(234, 179, 8, 0.2);
   --theme-secondary: #0284c7;
   --theme-accent: #38bdf8;
   --theme-success: #10b981;
   --theme-warning: #f59e0b;
   --theme-danger: #ef4444;
-  --theme-input: #0c1120;
+  --theme-input: #0b0f1e;
   --theme-input-border: #202c4b;
   --theme-input-text: #fef9c3;
-  --theme-nav-bg: rgba(17, 23, 42, 0.96);
+  --theme-navbar: rgba(16, 22, 42, 0.96);
+  --theme-nav-bg: rgba(16, 22, 42, 0.96);
   --theme-shadow: 0 10px 30px -5px rgba(234, 179, 8, 0.35);
   --theme-glow: 0 0 25px rgba(234, 179, 8, 0.5);
   --theme-gradient-start: #eab308;
   --theme-gradient-end: #0284c7;
-  --theme-hero-gradient: linear-gradient(135deg, rgba(202, 138, 4, 0.65) 0%, rgba(2, 132, 199, 0.6) 50%, rgba(17, 23, 42, 0.98) 100%);
-  --theme-hero-border: rgba(250, 204, 21, 0.55);
+  --theme-hero-gradient: linear-gradient(135deg, rgba(202, 138, 4, 0.75) 0%, rgba(2, 132, 199, 0.65) 50%, rgba(16, 22, 42, 0.98) 100%);
+  --theme-hero-border: rgba(250, 204, 21, 0.6);
   --theme-brand-from: #facc15;
   --theme-brand-via: #38bdf8;
   --theme-brand-to: #eab308;
@@ -319,12 +344,18 @@ html:not(.dark)[data-app-theme="pharaonic"] {
   --theme-primary-subtle: rgba(202, 138, 4, 0.12);
   --theme-secondary: #0369a1;
   --theme-accent: #0284c7;
+  --theme-success: #059669;
+  --theme-warning: #ca8a04;
+  --theme-danger: #dc2626;
   --theme-input: #ffffff;
   --theme-input-border: #fef08a;
   --theme-input-text: #172554;
+  --theme-navbar: rgba(255, 255, 255, 0.96);
   --theme-nav-bg: rgba(255, 255, 255, 0.96);
   --theme-shadow: 0 6px 20px -2px rgba(202, 138, 4, 0.18);
   --theme-glow: 0 0 15px rgba(202, 138, 4, 0.25);
+  --theme-gradient-start: #ca8a04;
+  --theme-gradient-end: #0369a1;
   --theme-hero-gradient: linear-gradient(135deg, #fef9c3 0%, #ffffff 50%, #e0f2fe 100%);
   --theme-hero-border: #fde047;
   --theme-brand-from: #ca8a04;
@@ -336,12 +367,13 @@ html:not(.dark)[data-app-theme="pharaonic"] {
 /* --------------------------------------------------------
    5. ANCIENT SUMERIAN (BRONZE, CLAY STONE & LAPIS)
    -------------------------------------------------------- */
-[data-app-theme="sumerian"] {
-  --theme-bg: #100d0a;
-  --theme-surface: #1a1510;
-  --theme-surface-elevated: #29211a;
-  --theme-card: #1d1712;
-  --theme-card-hover: #2b221a;
+html[data-app-theme="sumerian"],
+html.dark[data-app-theme="sumerian"] {
+  --theme-bg: #0f0c09;
+  --theme-surface: #1a140f;
+  --theme-surface-elevated: #281f18;
+  --theme-card: #1d1611;
+  --theme-card-hover: #2b2018;
   --theme-border: rgba(180, 83, 9, 0.5);
   --theme-border-hover: rgba(217, 119, 6, 0.85);
   --theme-text: #fde68a;
@@ -355,16 +387,17 @@ html:not(.dark)[data-app-theme="pharaonic"] {
   --theme-success: #10b981;
   --theme-warning: #f59e0b;
   --theme-danger: #ef4444;
-  --theme-input: #120f0b;
-  --theme-input-border: #36281e;
+  --theme-input: #120e0a;
+  --theme-input-border: #36271c;
   --theme-input-text: #fde68a;
-  --theme-nav-bg: rgba(26, 21, 16, 0.96);
+  --theme-navbar: rgba(26, 20, 15, 0.96);
+  --theme-nav-bg: rgba(26, 20, 15, 0.96);
   --theme-shadow: 0 10px 30px -5px rgba(194, 65, 12, 0.3);
   --theme-glow: 0 0 22px rgba(194, 65, 12, 0.45);
   --theme-gradient-start: #c2410c;
   --theme-gradient-end: #1e3a8a;
-  --theme-hero-gradient: linear-gradient(135deg, rgba(194, 65, 12, 0.65) 0%, rgba(30, 58, 138, 0.65) 50%, rgba(26, 21, 16, 0.98) 100%);
-  --theme-hero-border: rgba(217, 119, 6, 0.55);
+  --theme-hero-gradient: linear-gradient(135deg, rgba(194, 65, 12, 0.75) 0%, rgba(30, 58, 138, 0.7) 50%, rgba(26, 20, 15, 0.98) 100%);
+  --theme-hero-border: rgba(217, 119, 6, 0.6);
   --theme-brand-from: #fb923c;
   --theme-brand-via: #60a5fa;
   --theme-brand-to: #f59e0b;
@@ -387,12 +420,18 @@ html:not(.dark)[data-app-theme="sumerian"] {
   --theme-primary-subtle: rgba(154, 52, 18, 0.12);
   --theme-secondary: #1e3a8a;
   --theme-accent: #c2410c;
+  --theme-success: #059669;
+  --theme-warning: #c2410c;
+  --theme-danger: #b91c1c;
   --theme-input: #ffffff;
   --theme-input-border: #fed7aa;
   --theme-input-text: #271c14;
+  --theme-navbar: rgba(255, 255, 255, 0.96);
   --theme-nav-bg: rgba(255, 255, 255, 0.96);
   --theme-shadow: 0 6px 20px -2px rgba(154, 52, 18, 0.16);
   --theme-glow: 0 0 15px rgba(154, 52, 18, 0.25);
+  --theme-gradient-start: #9a3412;
+  --theme-gradient-end: #1e3a8a;
   --theme-hero-gradient: linear-gradient(135deg, #ffedd5 0%, #ffffff 50%, #e0e7ff 100%);
   --theme-hero-border: #fdba74;
   --theme-brand-from: #9a3412;
@@ -404,7 +443,8 @@ html:not(.dark)[data-app-theme="sumerian"] {
 /* --------------------------------------------------------
    6. MODERN MINIMALIST (ELECTRIC CYAN & CRISP ZINC)
    -------------------------------------------------------- */
-[data-app-theme="modern"] {
+html[data-app-theme="modern"],
+html.dark[data-app-theme="modern"] {
   --theme-bg: #060709;
   --theme-surface: #0e1015;
   --theme-surface-elevated: #171a22;
@@ -417,7 +457,7 @@ html:not(.dark)[data-app-theme="sumerian"] {
   --theme-primary: #06b6d4;
   --theme-primary-hover: #22d3ee;
   --theme-primary-text: #060709;
-  --theme-primary-subtle: rgba(6, 182, 212, 0.2);
+  --theme-primary-subtle: rgba(6, 182, 212, 0.18);
   --theme-secondary: #3b82f6;
   --theme-accent: #10b981;
   --theme-success: #10b981;
@@ -426,13 +466,14 @@ html:not(.dark)[data-app-theme="sumerian"] {
   --theme-input: #090a0e;
   --theme-input-border: #1c212c;
   --theme-input-text: #ffffff;
+  --theme-navbar: rgba(14, 16, 21, 0.96);
   --theme-nav-bg: rgba(14, 16, 21, 0.96);
   --theme-shadow: 0 10px 30px -5px rgba(6, 182, 212, 0.28);
   --theme-glow: 0 0 25px rgba(6, 182, 212, 0.5);
   --theme-gradient-start: #06b6d4;
   --theme-gradient-end: #3b82f6;
-  --theme-hero-gradient: linear-gradient(135deg, rgba(6, 182, 212, 0.45) 0%, rgba(59, 130, 246, 0.4) 50%, rgba(14, 16, 21, 0.98) 100%);
-  --theme-hero-border: rgba(34, 211, 238, 0.55);
+  --theme-hero-gradient: linear-gradient(135deg, rgba(6, 182, 212, 0.5) 0%, rgba(59, 130, 246, 0.45) 50%, rgba(14, 16, 21, 0.98) 100%);
+  --theme-hero-border: rgba(34, 211, 238, 0.6);
   --theme-brand-from: #22d3ee;
   --theme-brand-via: #60a5fa;
   --theme-brand-to: #34d399;
@@ -445,7 +486,7 @@ html:not(.dark)[data-app-theme="modern"] {
   --theme-surface-elevated: #e4e7eb;
   --theme-card: #ffffff;
   --theme-card-hover: #fafbfc;
-  --theme-border: #e2e8f0;
+  --theme-border: #cbd5e1;
   --theme-border-hover: #0891b2;
   --theme-text: #09090b;
   --theme-text-secondary: #64748b;
@@ -455,12 +496,18 @@ html:not(.dark)[data-app-theme="modern"] {
   --theme-primary-subtle: rgba(8, 145, 178, 0.12);
   --theme-secondary: #2563eb;
   --theme-accent: #059669;
+  --theme-success: #059669;
+  --theme-warning: #d97706;
+  --theme-danger: #dc2626;
   --theme-input: #ffffff;
   --theme-input-border: #cbd5e1;
   --theme-input-text: #09090b;
+  --theme-navbar: rgba(255, 255, 255, 0.96);
   --theme-nav-bg: rgba(255, 255, 255, 0.96);
   --theme-shadow: 0 6px 20px -2px rgba(8, 145, 178, 0.16);
   --theme-glow: 0 0 15px rgba(8, 145, 178, 0.25);
+  --theme-gradient-start: #0891b2;
+  --theme-gradient-end: #2563eb;
   --theme-hero-gradient: linear-gradient(135deg, #cffafe 0%, #ffffff 50%, #dbeafe 100%);
   --theme-hero-border: #a5f3fc;
   --theme-brand-from: #0891b2;
@@ -474,32 +521,56 @@ html:not(.dark)[data-app-theme="modern"] {
    ======================================================== */
 
 /* Transitions for fluid theme morphing */
-body, header, nav, div, button, input, textarea, a {
+body, header, nav, div, button, input, textarea, a, span {
   transition-property: background-color, border-color, color, box-shadow;
   transition-duration: 200ms;
   transition-timing-function: ease-in-out;
 }
 
 /* Dynamic Gradient Text for Logos & Headings */
-.brand-gradient-text {
-  background: linear-gradient(to right, var(--theme-brand-from), var(--theme-brand-via), var(--theme-brand-to)) !important;
+[data-app-theme] .brand-gradient-text {
+  background: linear-gradient(135deg, var(--theme-brand-from), var(--theme-brand-via), var(--theme-brand-to)) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   color: transparent !important;
 }
 
 /* Hero Section Theming */
-.app-hero-container {
+[data-app-theme] .app-hero-container {
   background: var(--theme-hero-gradient) !important;
   border-color: var(--theme-hero-border) !important;
   box-shadow: var(--theme-shadow) !important;
 }
 
-/* Primary Action Buttons */
+/* ========================================================
+   BUTTONS & GRADIENTS
+   ======================================================== */
+
+/* Primary Gradient Action Buttons across all 20 tools */
+[data-app-theme] [class*="from-purple-600"][class*="to-indigo-600"],
+[data-app-theme] [class*="from-purple-500"][class*="to-indigo-500"],
+[data-app-theme] [class*="from-indigo-600"][class*="to-purple-600"],
+[data-app-theme] [class*="from-indigo-500"][class*="to-purple-500"],
+[data-app-theme] .app-btn-gradient {
+  background-image: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary)) !important;
+  color: var(--theme-primary-text) !important;
+  box-shadow: var(--theme-shadow) !important;
+}
+
+[data-app-theme] [class*="from-purple-600"][class*="to-indigo-600"]:hover,
+[data-app-theme] [class*="from-purple-500"][class*="to-indigo-500"]:hover,
+[data-app-theme] [class*="hover:from-purple-500"]:hover,
+[data-app-theme] [class*="hover:from-purple-600"]:hover {
+  background-image: linear-gradient(135deg, var(--theme-primary-hover), var(--theme-secondary)) !important;
+}
+
+/* Solid Primary Buttons */
 [data-app-theme] .bg-purple-600,
 [data-app-theme] .bg-purple-700,
 [data-app-theme] .bg-purple-500,
-.app-btn-primary {
+[data-app-theme] [class*="bg-purple-600"],
+[data-app-theme] [class*="bg-purple-700"],
+[data-app-theme] .app-btn-primary {
   background-color: var(--theme-primary) !important;
   color: var(--theme-primary-text) !important;
 }
@@ -507,15 +578,29 @@ body, header, nav, div, button, input, textarea, a {
 [data-app-theme] .hover\:bg-purple-500:hover,
 [data-app-theme] .hover\:bg-purple-600:hover,
 [data-app-theme] .hover\:bg-purple-700:hover,
-.app-btn-primary:hover {
+[data-app-theme] [class*="hover:bg-purple-"]:hover,
+[data-app-theme] .app-btn-primary:hover {
   background-color: var(--theme-primary-hover) !important;
 }
 
-/* Themed Text Colors */
-[data-app-theme] .text-purple-400,
-[data-app-theme] .text-purple-300,
-[data-app-theme] .text-purple-500,
-[data-app-theme] .text-purple-600 {
+/* ========================================================
+   THEMED BADGES, PILLS & SELECTION STATES
+   ======================================================== */
+[data-app-theme] [class*="bg-purple-500/"],
+[data-app-theme] [class*="bg-purple-600/"],
+[data-app-theme] [class*="bg-purple-950/"],
+[data-app-theme] .bg-purple-50,
+[data-app-theme] .theme-badge {
+  background-color: var(--theme-primary-subtle) !important;
+  color: var(--theme-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+
+/* ========================================================
+   THEMED TEXT COLORS
+   ======================================================== */
+[data-app-theme] [class*="text-purple-"],
+[data-app-theme] .theme-text-primary {
   color: var(--theme-primary) !important;
 }
 
@@ -529,42 +614,52 @@ body, header, nav, div, button, input, textarea, a {
   color: var(--theme-secondary) !important;
 }
 
-/* Themed Border Colors */
-[data-app-theme] .border-purple-500,
-[data-app-theme] .border-purple-500\/20,
-[data-app-theme] .border-purple-500\/30,
-[data-app-theme] .border-purple-500\/40,
-[data-app-theme] .border-purple-500\/50,
-[data-app-theme] .border-purple-200,
-[data-app-theme] .border-purple-600 {
+/* ========================================================
+   THEMED BORDERS & FOCUS RINGS
+   ======================================================== */
+[data-app-theme] [class*="border-purple-"],
+[data-app-theme] .theme-border {
   border-color: var(--theme-border) !important;
 }
 
-[data-app-theme] .focus\:border-purple-500:focus,
-[data-app-theme] .focus\:border-purple-400:focus {
+[data-app-theme] [class*="focus:border-purple-"]:focus,
+[data-app-theme] [class*="focus:border-purple-"]:focus-within {
   border-color: var(--theme-primary) !important;
 }
 
-/* Themed Background Pills & Badges */
-[data-app-theme] .bg-purple-500\/10,
-[data-app-theme] .bg-purple-500\/20,
-[data-app-theme] .bg-purple-500\/30,
-[data-app-theme] .bg-purple-50 {
-  background-color: var(--theme-primary-subtle) !important;
-  color: var(--theme-primary) !important;
+[data-app-theme] [class*="focus:ring-purple-"]:focus {
+  --tw-ring-color: var(--theme-primary) !important;
 }
 
-/* Focus Rings */
-[data-app-theme] .focus\:ring-purple-500\/20:focus,
-[data-app-theme] .focus\:ring-purple-400\/20:focus,
-[data-app-theme] .ring-purple-500 {
-  --tw-ring-color: var(--theme-border) !important;
+[data-app-theme] [class*="shadow-purple-"] {
+  box-shadow: var(--theme-shadow) !important;
 }
 
-/* Accents for Range Sliders & Checkboxes */
-[data-app-theme] input[type="range"],
-[data-app-theme] .accent-purple-500,
-[data-app-theme] .accent-purple-600 {
+/* ========================================================
+   INPUTS, TEXTAREAS & FORM CONTROLS
+   ======================================================== */
+[data-app-theme] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"]):not([type="color"]):not([type="file"]),
+[data-app-theme] textarea,
+[data-app-theme] select {
+  background-color: var(--theme-input) !important;
+  color: var(--theme-input-text) !important;
+  border-color: var(--theme-input-border) !important;
+}
+
+[data-app-theme] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"]):not([type="color"]):not([type="file"]):focus,
+[data-app-theme] textarea:focus,
+[data-app-theme] select:focus {
+  border-color: var(--theme-primary) !important;
+  box-shadow: 0 0 0 2px var(--theme-primary-subtle) !important;
+  outline: none !important;
+}
+
+/* Sliders, checkboxes and radio inputs */
+[data-app-theme] input[type="range"] {
+  accent-color: var(--theme-primary) !important;
+}
+
+[data-app-theme] [class*="accent-purple-"] {
   accent-color: var(--theme-primary) !important;
 }
 
@@ -573,87 +668,90 @@ body, header, nav, div, button, input, textarea, a {
   accent-color: var(--theme-primary) !important;
 }
 
-/* Tool option switches and selection boxes */
-[data-app-theme] .bg-purple-950\/30,
-[data-app-theme] .bg-purple-950\/40 {
-  background-color: var(--theme-primary-subtle) !important;
-  border-color: var(--theme-border) !important;
-  color: var(--theme-text) !important;
-}
-
-/* Gradients */
-[data-app-theme] .from-purple-600 {
-  --tw-gradient-from: var(--theme-primary) !important;
-  --tw-gradient-to: var(--theme-secondary) !important;
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
-}
-[data-app-theme] .to-indigo-600 {
-  --tw-gradient-to: var(--theme-secondary) !important;
-}
-[data-app-theme] .from-purple-950\/40 {
-  --tw-gradient-from: var(--theme-primary-subtle) !important;
-}
-[data-app-theme] .to-indigo-950\/40 {
-  --tw-gradient-to: var(--theme-surface-elevated) !important;
-}
-
-/* Dark Mode Surfaces & Inputs */
-.dark[data-app-theme] .bg-slate-900,
-.dark[data-app-theme] .bg-slate-900\/80,
-.dark[data-app-theme] .bg-slate-900\/60,
-.dark[data-app-theme] .bg-slate-900\/90,
-.dark[data-app-theme] .bg-slate-900\/95 {
+/* ========================================================
+   DARK MODE SURFACES & CONTAINERS
+   ======================================================== */
+html.dark[data-app-theme] [class*="bg-slate-900"],
+html.dark[data-app-theme] .bg-slate-900 {
   background-color: var(--theme-surface) !important;
   border-color: var(--theme-border) !important;
 }
 
-.dark[data-app-theme] .border-slate-800,
-.dark[data-app-theme] .border-slate-800\/80,
-.dark[data-app-theme] .border-slate-800\/60,
-.dark[data-app-theme] .border-slate-800\/40,
-.dark[data-app-theme] .border-slate-700,
-.dark[data-app-theme] .border-slate-700\/50,
-.dark[data-app-theme] .border-slate-700\/60 {
-  border-color: var(--theme-border) !important;
-}
-
-.dark[data-app-theme] .bg-slate-950,
-.dark[data-app-theme] .bg-slate-950\/70,
-.dark[data-app-theme] .bg-slate-950\/80,
-.dark[data-app-theme] .bg-slate-950\/90,
-.dark[data-app-theme] .bg-slate-950\/60,
-.dark[data-app-theme] .bg-slate-950\/40 {
+html.dark[data-app-theme] [class*="bg-slate-950"],
+html.dark[data-app-theme] .bg-slate-950 {
   background-color: var(--theme-input) !important;
   border-color: var(--theme-border) !important;
 }
 
-.dark[data-app-theme] .text-slate-400 {
-  color: var(--theme-text-secondary) !important;
-}
-
-/* Light Mode Surfaces & Inputs */
-html:not(.dark)[data-app-theme] .bg-slate-900,
-html:not(.dark)[data-app-theme] .bg-slate-900\/80,
-html:not(.dark)[data-app-theme] .bg-slate-900\/60,
-html:not(.dark)[data-app-theme] .bg-slate-950,
-html:not(.dark)[data-app-theme] .bg-white {
-  background-color: var(--theme-surface) !important;
-  border-color: var(--theme-border) !important;
-}
-
-html:not(.dark)[data-app-theme] .bg-slate-50,
-html:not(.dark)[data-app-theme] .bg-slate-100 {
+html.dark[data-app-theme] [class*="bg-slate-800"],
+html.dark[data-app-theme] .bg-slate-800 {
   background-color: var(--theme-surface-elevated) !important;
   border-color: var(--theme-border) !important;
 }
 
-html:not(.dark)[data-app-theme] .border-slate-200,
-html:not(.dark)[data-app-theme] .border-slate-100,
-html:not(.dark)[data-app-theme] .border-slate-800 {
+html.dark[data-app-theme] [class*="border-slate-800"],
+html.dark[data-app-theme] [class*="border-slate-700"],
+html.dark[data-app-theme] [class*="border-slate-900"] {
   border-color: var(--theme-border) !important;
 }
 
-html:not(.dark)[data-app-theme] .text-slate-500,
-html:not(.dark)[data-app-theme] .text-slate-600 {
+html.dark[data-app-theme] [class*="hover:bg-slate-800"]:hover,
+html.dark[data-app-theme] [class*="hover:bg-slate-700"]:hover {
+  background-color: var(--theme-card-hover) !important;
+}
+
+html.dark[data-app-theme] [class*="text-slate-400"],
+html.dark[data-app-theme] [class*="text-slate-500"] {
   color: var(--theme-text-secondary) !important;
+}
+
+html.dark[data-app-theme] [class*="text-slate-300"],
+html.dark[data-app-theme] [class*="text-slate-200"],
+html.dark[data-app-theme] [class*="text-slate-100"] {
+  color: var(--theme-text) !important;
+}
+
+/* ========================================================
+   LIGHT MODE SURFACES & CONTAINERS
+   ======================================================== */
+html:not(.dark)[data-app-theme] .bg-white,
+html:not(.dark)[data-app-theme] [class*="bg-slate-50"],
+html:not(.dark)[data-app-theme] [class*="bg-slate-900"] {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-border) !important;
+}
+
+html:not(.dark)[data-app-theme] [class*="bg-slate-100"],
+html:not(.dark)[data-app-theme] [class*="bg-slate-200"],
+html:not(.dark)[data-app-theme] [class*="bg-slate-800"] {
+  background-color: var(--theme-surface-elevated) !important;
+  border-color: var(--theme-border) !important;
+}
+
+html:not(.dark)[data-app-theme] [class*="bg-slate-950"] {
+  background-color: var(--theme-input) !important;
+}
+
+html:not(.dark)[data-app-theme] [class*="border-slate-200"],
+html:not(.dark)[data-app-theme] [class*="border-slate-100"],
+html:not(.dark)[data-app-theme] [class*="border-slate-800"],
+html:not(.dark)[data-app-theme] [class*="border-slate-700"] {
+  border-color: var(--theme-border) !important;
+}
+
+html:not(.dark)[data-app-theme] [class*="text-slate-900"],
+html:not(.dark)[data-app-theme] [class*="text-slate-800"] {
+  color: var(--theme-text) !important;
+}
+
+html:not(.dark)[data-app-theme] [class*="text-slate-700"],
+html:not(.dark)[data-app-theme] [class*="text-slate-600"],
+html:not(.dark)[data-app-theme] [class*="text-slate-500"],
+html:not(.dark)[data-app-theme] [class*="text-slate-400"] {
+  color: var(--theme-text-secondary) !important;
+}
+
+html:not(.dark)[data-app-theme] [class*="hover:bg-slate-50"]:hover,
+html:not(.dark)[data-app-theme] [class*="hover:bg-slate-100"]:hover {
+  background-color: var(--theme-card-hover) !important;
 }

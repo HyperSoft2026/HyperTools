@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Info } from 'lucide-react';
 
 interface ToastProps {
   message: string;
@@ -15,19 +15,30 @@ export const Toast: React.FC<ToastProps> = ({ message, type = 'success', isVisib
       <div
         style={{
           backgroundColor: 'var(--theme-surface)',
+          borderColor:
+            type === 'success'
+              ? 'rgba(16, 185, 129, 0.4)'
+              : type === 'error'
+              ? 'rgba(244, 63, 94, 0.4)'
+              : 'var(--theme-border)',
           boxShadow: 'var(--theme-shadow)',
         }}
         className={`flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-xl border backdrop-blur-md text-sm font-semibold ${
           type === 'success'
-            ? 'border-emerald-500/40 text-emerald-400'
+            ? 'text-emerald-400'
             : type === 'error'
-            ? 'border-rose-500/40 text-rose-400'
-            : 'border-purple-500/40 text-purple-300'
+            ? 'text-rose-400'
+            : ''
         }`}
       >
         {type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
         {type === 'error' && <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />}
-        <span>{message}</span>
+        {type === 'info' && (
+          <Info style={{ color: 'var(--theme-primary)' }} className="w-5 h-5 shrink-0" />
+        )}
+        <span style={type === 'info' ? { color: 'var(--theme-text)' } : undefined}>
+          {message}
+        </span>
       </div>
     </div>
   );
